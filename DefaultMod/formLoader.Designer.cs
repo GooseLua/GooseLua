@@ -27,7 +27,7 @@
             this.modList = new System.Windows.Forms.ListBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.metroPanel3 = new MetroFramework.Controls.MetroPanel();
-            this.console = new System.Windows.Forms.RichTextBox();
+            this._console = new System.Windows.Forms.RichTextBox();
             this.metroTextBox1 = new MetroFramework.Controls.MetroTextBox();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
@@ -111,7 +111,7 @@
             // 
             // metroPanel3
             // 
-            this.metroPanel3.Controls.Add(this.console);
+            this.metroPanel3.Controls.Add(this._console);
             this.metroPanel3.Controls.Add(this.metroTextBox1);
             this.metroPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroPanel3.HorizontalScrollbarBarColor = true;
@@ -126,20 +126,20 @@
             this.metroPanel3.VerticalScrollbarHighlightOnWheel = false;
             this.metroPanel3.VerticalScrollbarSize = 10;
             // 
-            // console
+            // _console
             // 
-            this.metroStyleExtender1.SetApplyMetroTheme(this.console, true);
-            this.console.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            this.console.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.console.DetectUrls = false;
-            this.console.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.console.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
-            this.console.Location = new System.Drawing.Point(0, 0);
-            this.console.Name = "console";
-            this.console.ReadOnly = true;
-            this.console.Size = new System.Drawing.Size(752, 305);
-            this.console.TabIndex = 2;
-            this.console.Text = "";
+            this.metroStyleExtender1.SetApplyMetroTheme(this._console, true);
+            this._console.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            this._console.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this._console.DetectUrls = false;
+            this._console.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._console.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(170)))), ((int)(((byte)(170)))));
+            this._console.Location = new System.Drawing.Point(0, 0);
+            this._console.Name = "_console";
+            this._console.ReadOnly = true;
+            this._console.Size = new System.Drawing.Size(752, 305);
+            this._console.TabIndex = 2;
+            this._console.Text = "";
             // 
             // metroTextBox1
             // 
@@ -199,6 +199,7 @@
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.DropShadow;
             this.Text = "Desktop Goose // Lua Modloader";
             this.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formLoader_FormClosing);
             this.Load += new System.EventHandler(this.formLoader_Load);
             this.metroTabControl1.ResumeLayout(false);
@@ -222,7 +223,7 @@
         private MetroFramework.Controls.MetroPanel metroPanel3;
         private MetroFramework.Components.MetroStyleExtender metroStyleExtender1;
         private MetroFramework.Components.MetroStyleManager metroStyleManager1;
-        private System.Windows.Forms.RichTextBox console;
+        private System.Windows.Forms.RichTextBox _console;
         private System.Windows.Forms.ListBox modList;
         private MetroFramework.Controls.MetroTextBox metroTextBox1;
     }

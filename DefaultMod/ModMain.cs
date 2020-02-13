@@ -100,14 +100,14 @@ namespace GooseLua {
             position["y"] = g.position.y;
             goose["position"] = position;
             goose["setTarget"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                int x = arguments.Count > 0 ? arguments.AsInt(0, "goose.setTarget") : 0;
-                int y = arguments.Count > 1 ? arguments.AsInt(1, "goose.setTarget") : 0;
+                int x = arguments.Count > 0 ? arguments.AsInt(0, "Goose.setTarget") : 0;
+                int y = arguments.Count > 1 ? arguments.AsInt(1, "Goose.setTarget") : 0;
                 g.targetPos = new SamEngine.Vector2(x, y);
                 return DynValue.Nil;
             });
             goose["setPosition"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                int x = arguments.Count > 0 ? arguments.AsInt(0, "goose.setTarget") : 0;
-                int y = arguments.Count > 1 ? arguments.AsInt(1, "goose.setTarget") : 0;
+                int x = arguments.Count > 0 ? arguments.AsInt(0, "Goose.setPosition") : 0;
+                int y = arguments.Count > 1 ? arguments.AsInt(1, "Goose.setPosition") : 0;
                 g.position = new SamEngine.Vector2(x, y);
                 return DynValue.Nil;
             });

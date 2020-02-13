@@ -10,11 +10,11 @@ namespace GooseLua {
         public static string path;
         public static Hook hook = new Hook();
 
-        public static void RunString(string code) {
+        public static void RunString(string code, string name = "RunString") {
             try {
-                LuaState.DoString(code);
+                LuaState.DoString(code, LuaState.Globals, name);
             } catch (ScriptRuntimeException ex) {
-                ModEntryPoint.form.MsgC(Color.FromArgb(0, 0, 0), "Doh! An error occured! {0}", ex.DecoratedMessage);
+                Util.MsgC(ModEntryPoint.form, Color.FromArgb(255, 0, 0), string.Format("Doh! An error occured! {0}", ex.DecoratedMessage), "\r\n");
             }
         }
     }

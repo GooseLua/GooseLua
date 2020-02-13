@@ -26,13 +26,17 @@ namespace GooseLua {
             string[] files = Directory.GetFiles(_G.path, "*.lua");
             foreach (string mod in files) {
                 modList.Items.Add(mod);
-                _G.LuaState.DoFile(mod);
+                try {
+                    _G.LuaState.DoFile(mod);
+                } catch (ScriptRuntimeException ex) {
+                    Util.MsgC(this, Color.FromArgb(255, 0, 0), string.Format("Doh! An error occured! {0}", ex.DecoratedMessage), "\r\n");
+                }
             }
         }
 
         private void formLoader_FormClosing(object sender, FormClosingEventArgs e) {
             e.Cancel = e.CloseReason == CloseReason.UserClosing;
-            if (e.CloseReason == CloseReason.UserClosing && MessageBox.Show("Are you sure you want to exit?", "Desktop Goose", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+            if (e.CloseReason != CloseReason.UserClosing || MessageBox.Show("Are you sure you want to exit?", "Desktop Goose", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
                 Application.Exit();
             }
         }
@@ -44,16 +48,9 @@ namespace GooseLua {
             }
         }
 
-        public void MsgC(params dynamic[] args) {
-            foreach(dynamic arg in args) {
-                if(arg is Color) {
-                    console.SelectionStart = console.TextLength;
-                    console.SelectionLength = 0;
-                    console.SelectionColor = (Color) arg;
-                } else {
-                    console.AppendText(arg);
-                    console.SelectionColor = console.ForeColor;
-                }
+        public RichTextBox console {
+            get {
+                return _console;
             }
         }
     }

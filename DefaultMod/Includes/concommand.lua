@@ -8,7 +8,7 @@ local Msg = Msg
    Desc: A module to take care of the registration and calling
          of Lua console commands.
 -----------------------------------------------------------]]
-module("concommand")
+concommand = {}
 
 local CommandList = {}
 local CompleteList = {}
@@ -17,7 +17,7 @@ local CompleteList = {}
    Name: concommand.GetTable( )
    Desc: Returns the table of console commands and auto complete
 -----------------------------------------------------------]]
-function GetTable()
+function concommand.GetTable()
 	return CommandList, CompleteList
 end
 
@@ -25,7 +25,7 @@ end
    Name: concommand.Add( name, func, completefunc )
    Desc: Register a new console command
 -----------------------------------------------------------]]
-function Add( name, func, completefunc, help )
+function concommand.Add( name, func, completefunc, help )
 	local LowerName = string.lower( name )
 	CommandList[ LowerName ] = func
 	CompleteList[ LowerName ] = completefunc
@@ -36,7 +36,7 @@ end
    Name: concommand.Remove( name )
    Desc: Removes a console command
 -----------------------------------------------------------]]
-function Remove( name )
+function concommand.Remove( name )
 	local LowerName = string.lower( name )
 	CommandList[ LowerName ] = nil
 	CompleteList[ LowerName ] = nil
@@ -46,7 +46,7 @@ end
    Name: concommand.Run( )
    Desc: Called by the engine when an unknown console command is run
 -----------------------------------------------------------]]
-function Run( player, command, arguments, args )
+function concommand.Run( player, command, arguments, args )
 
 	local LowerCommand = string.lower( command )
 
@@ -64,7 +64,7 @@ end
    Name: concommand.AutoComplete( )
    Desc: Returns a table for the autocompletion
 -----------------------------------------------------------]]
-function AutoComplete( command, arguments )
+function concommand.AutoComplete( command, arguments )
 
 	local LowerCommand = string.lower( command )
 
