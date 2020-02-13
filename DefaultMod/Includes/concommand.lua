@@ -46,12 +46,12 @@ end
    Name: concommand.Run( )
    Desc: Called by the engine when an unknown console command is run
 -----------------------------------------------------------]]
-function concommand.Run( player, command, arguments, args )
+function concommand.Run( command, arguments, args )
 
 	local LowerCommand = string.lower( command )
 
 	if ( CommandList[ LowerCommand ] ~= nil ) then
-		CommandList[ LowerCommand ]( player, command, arguments, args )
+		CommandList[ LowerCommand ]( command, arguments, args )
 		return true
 	end
 

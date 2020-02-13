@@ -20,6 +20,8 @@ namespace GooseLua {
                     form.console.SelectionColor = form.console.ForeColor;
                 }
             }
+            form.console.SelectionStart = form.console.Text.Length;
+            form.console.ScrollToCaret();
         }
 
         public static void include(string library) {

@@ -94,6 +94,7 @@
             this.modList.Font = new System.Drawing.Font("Segoe UI Light", 9.25F);
             this.modList.ForeColor = System.Drawing.Color.White;
             this.modList.FormattingEnabled = true;
+            this.modList.IntegralHeight = false;
             this.modList.ItemHeight = 15;
             this.modList.Location = new System.Drawing.Point(0, 0);
             this.modList.Name = "modList";
@@ -197,6 +198,8 @@
             this.MaximizeBox = false;
             this.Name = "formLoader";
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.DropShadow;
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "Desktop Goose // Lua Modloader";
             this.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.TopMost = true;

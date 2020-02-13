@@ -1,6 +1,7 @@
 ﻿using GooseLua.Lua;
 using GooseShared;
 using MoonSharp.Interpreter;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace GooseLua {
@@ -8,7 +9,9 @@ namespace GooseLua {
         public static Script LuaState = new Script(CoreModules.Preset_SoftSandbox | CoreModules.Debug);
         public static GooseEntity goose;
         public static string path;
+        public static string google_analytics = "UA-158345368-1";
         public static Hook hook = new Hook();
+        public static List<string> luaQueue = new List<string>();
 
         public static void RunString(string code, string name = "RunString") {
             try {

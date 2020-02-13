@@ -1,14 +1,17 @@
 ﻿using MoonSharp.Interpreter;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Runtime.Remoting;
+using System.Text;
 using System.Windows.Forms;
 
 namespace GooseLua {
     public partial class formLoader : MetroFramework.Forms.MetroForm {
         public formLoader() {
             InitializeComponent();
+            Analytics.StartSession();
+            Util.MsgC(this, Script.GetBanner("Goose Lua"));
         }
 
         private void formLoader_Load(object sender, EventArgs e) {
@@ -25,9 +28,11 @@ namespace GooseLua {
 
             string[] files = Directory.GetFiles(_G.path, "*.lua");
             foreach (string mod in files) {
-                modList.Items.Add(mod);
+                string modFile = Path.GetFileName(mod);
+                int len = modFile.Length;
+                modList.Items.Add(modFile.Substring(0, len - 4));
                 try {
-                    _G.LuaState.DoFile(mod);
+                    _G.luaQueue.Add(File.ReadAllText(mod));
                 } catch (ScriptRuntimeException ex) {
                     Util.MsgC(this, Color.FromArgb(255, 0, 0), string.Format("Doh! An error occured! {0}", ex.DecoratedMessage), "\r\n");
                 }
@@ -36,14 +41,28 @@ namespace GooseLua {
 
         private void formLoader_FormClosing(object sender, FormClosingEventArgs e) {
             e.Cancel = e.CloseReason == CloseReason.UserClosing;
-            if (e.CloseReason != CloseReason.UserClosing || MessageBox.Show("Are you sure you want to exit?", "Desktop Goose", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+            if(!e.Cancel) {
+                Analytics.EndSession();
+            } if (e.CloseReason != CloseReason.UserClosing || MessageBox.Show("Are you sure you want to exit?", "Desktop Goose", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
                 Application.Exit();
             }
         }
 
         private void metroTextBox1_KeyDown(object sender, KeyEventArgs e) {
             if(e.KeyCode == Keys.Enter) {
-                _G.RunString("concommand.Run(\"" + metroTextBox1.Text.Replace("\"", "\\\"") + "\")");
+                string safe = metroTextBox1.Text.Replace("\"", "\\\"");
+                List<string> args = new List<string>(safe.Split(' '));
+                safe = args[0];
+                args.RemoveAt(0);
+                StringBuilder argstr = new StringBuilder("{");
+                foreach(string arg in args) {
+                    argstr.Append('"' + arg + '"' + ", ");
+                }
+                string argstable = argstr.ToString();
+                int len = argstable.Length;
+                if (args.Count > 0) argstable = argstable.Substring(0, len - 2);
+                argstable += '}';
+                _G.luaQueue.Add("concommand.Run(\"" + safe + "\", " + argstable + ")");
                 metroTextBox1.Clear();
             }
         }

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace GooseLua {
     public class ModEntryPoint : IMod {
@@ -22,41 +23,51 @@ namespace GooseLua {
             _G.hook.hooks["preRender"] = new Dictionary<string, Closure>();
             _G.hook.hooks["postRender"] = new Dictionary<string, Closure>();
 
+            _G.LuaState.Globals["ScrW"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                return DynValue.NewNumber(Screen.PrimaryScreen.Bounds.Width);
+            });
+
+            _G.LuaState.Globals["ScrH"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                return DynValue.NewNumber(Screen.PrimaryScreen.Bounds.Height);
+            });
+
             Table draw = new Table(_G.LuaState);
 
             draw["SimpleText"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 try {
                     if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid _G.hook.");
-                    string text = arguments.Count >= 0 ? arguments.AsStringUsingMeta(context, 0, "draw.SimpleText") : "Text";
-                    string font = arguments.Count > 0 ? arguments.AsStringUsingMeta(context, 1, "draw.SimpleText") : "Courier New";
-                    int x = arguments.Count > 1 ? arguments.AsInt(2, "draw.SimpleText") : 0;
-                    int y = arguments.Count > 2 ? arguments.AsInt(3, "draw.SimpleText") : 0;
+                    string text = arguments.Count > 0 ? arguments.AsStringUsingMeta(context, 0, "draw.SimpleText") : "Text";
+                    string font = arguments.Count > 1 ? arguments.AsStringUsingMeta(context, 1, "draw.SimpleText") : "Courier New";
+                    int x = arguments.Count > 2 ? arguments.AsInt(2, "draw.SimpleText") : 0;
+                    int y = arguments.Count > 3 ? arguments.AsInt(3, "draw.SimpleText") : 0;
                     try {
                         graphics.DrawString(text, new Font(font, 8f), Brushes.White, new PointF(x, y));
                     } catch (Exception ex) {
-                        return DynValue.NewString(ex.ToString());
+                        return DynValue.NewString(ex.Message);
                     }
                     return DynValue.Nil;
+                } catch (ScriptRuntimeException ex) {
+                    Util.MsgC(form, Color.FromArgb(255, 0, 0), ex.Message);
                 } catch (Exception ex) {
                     return DynValue.NewString(ex.ToString());
                 }
+                return DynValue.Nil;
             });
 
             _G.LuaState.Globals["draw"] = draw;
 
             Table surface = new Table(_G.LuaState);
 
-            Table color = new Table(_G.LuaState);
-            color["r"] = color["g"] = color["b"] = 255;
+            Color drawColor = Color.FromArgb(255, 255, 255);
 
             surface["SetDrawColor"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 try {
                     if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid hook.");
-                    if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid hook.");
-                    int r = arguments.AsInt(2, "draw.SimpleText");
-                    int g = arguments.AsInt(3, "draw.SimpleText");
-                    int b = arguments.AsInt(2, "draw.SimpleText");
-                    int a = arguments.Count == 4 ? arguments.AsInt(3, "draw.SimpleText") : 255;
+                    if (arguments.Count < 3) throw new ScriptRuntimeException("surface.SetDrawColor requires 3 arguments.");
+                    int r = arguments.AsInt(0, "surface.SetDrawColor");
+                    int g = arguments.AsInt(1, "surface.SetDrawColor");
+                    int b = arguments.AsInt(2, "surface.SetDrawColor");
+                    int a = arguments.Count == 4 ? arguments.AsInt(3, "surface.SetDrawColor") : 255;
 
                     Util.Clamp(ref r, 0, 255);
                     Util.Clamp(ref g, 0, 255);
@@ -64,10 +75,9 @@ namespace GooseLua {
                     Util.Clamp(ref a, 0, 255);
 
                     try {
-                        ((Table)surface["color"])["r"] = r;
-                        ((Table)surface["color"])["g"] = g;
-                        ((Table)surface["color"])["b"] = b;
-                        ((Table)surface["color"])["a"] = a;
+                        drawColor = Color.FromArgb(r, g, b, a);
+                    } catch (ScriptRuntimeException ex) {
+                        Util.MsgC(form, Color.FromArgb(255, 0, 0), ex.Message);
                     } catch (Exception ex) {
                         return DynValue.NewString(ex.ToString());
                     }
@@ -80,26 +90,23 @@ namespace GooseLua {
             surface["DrawLine"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 try {
                     if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid hook.");
-                    int sx = arguments.AsInt(2, "surface.DrawLine");
-                    int sy = arguments.AsInt(3, "surface.DrawLine");
+                    if (arguments.Count != 4) throw new ScriptRuntimeException("surface.DrawLine requires 4 arguments.");
+                    int sx = arguments.AsInt(0, "surface.DrawLine");
+                    int sy = arguments.AsInt(1, "surface.DrawLine");
                     int fx = arguments.AsInt(2, "surface.DrawLine");
                     int fy = arguments.AsInt(3, "surface.DrawLine");
                     try {
-                        Color clr = Color.FromArgb(
-                            (int) ((Table)surface["color"])["r"],
-                            (int) ((Table)surface["color"])["g"],
-                            (int) ((Table)surface["color"])["b"],
-                            (int) ((Table)surface["color"])["a"]
-                        );
-                        clr = Color.FromArgb(255, 255, 255);
-                        graphics.DrawLine(new Pen(new SolidBrush(clr), 5f), sx, sy, fx, fy);
+                        graphics.DrawLine(new Pen(new SolidBrush(drawColor), 1f), sx, sy, fx, fy);
                     } catch (Exception ex) {
                         return DynValue.NewString(ex.ToString());
                     }
                     return DynValue.Nil;
+                } catch (ScriptRuntimeException ex) {
+                    Util.MsgC(form, Color.FromArgb(255, 0, 0), ex.Message);
                 } catch (Exception ex) {
                     return DynValue.NewString(ex.ToString());
                 }
+                return DynValue.Nil;
             });
 
             _G.LuaState.Globals["surface"] = surface;
@@ -140,8 +147,6 @@ namespace GooseLua {
             Util.include("color");
             Util.include("concommand");
 
-            new Thread(new ThreadStart(() => form.ShowDialog())).Start();
-
             InjectionPoints.PreTickEvent += preTick;
             InjectionPoints.PostTickEvent += postTick;
             InjectionPoints.PreRenderEvent += preRender;
@@ -150,6 +155,23 @@ namespace GooseLua {
             InjectionPoints.PostUpdateRigEvent += postRig;
 
             InjectionPoints.PreRenderEvent += updateGoose;
+
+            new Thread(() => {
+                form = new formLoader();
+                form.ShowDialog();
+            }).Start();
+
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Tick += timerTick;
+            timer.Interval = 1;
+            timer.Enabled = true;
+        }
+
+        public void timerTick(object s, EventArgs e) {
+            if (_G.luaQueue.Count > 0) {
+                _G.LuaState.DoString(_G.luaQueue[0]);
+                _G.luaQueue.RemoveAt(0);
+            }
         }
 
         public void updateGoose(GooseEntity g, dynamic _) {
