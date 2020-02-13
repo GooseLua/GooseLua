@@ -44,6 +44,66 @@ namespace GooseLua {
 
             _G.LuaState.Globals["draw"] = draw;
 
+            Table surface = new Table(_G.LuaState);
+
+            Table color = new Table(_G.LuaState);
+            color["r"] = color["g"] = color["b"] = 255;
+
+            surface["SetDrawColor"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                try {
+                    if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid hook.");
+                    if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid hook.");
+                    int r = arguments.AsInt(2, "draw.SimpleText");
+                    int g = arguments.AsInt(3, "draw.SimpleText");
+                    int b = arguments.AsInt(2, "draw.SimpleText");
+                    int a = arguments.Count == 4 ? arguments.AsInt(3, "draw.SimpleText") : 255;
+
+                    Util.Clamp(ref r, 0, 255);
+                    Util.Clamp(ref g, 0, 255);
+                    Util.Clamp(ref b, 0, 255);
+                    Util.Clamp(ref a, 0, 255);
+
+                    try {
+                        ((Table)surface["color"])["r"] = r;
+                        ((Table)surface["color"])["g"] = g;
+                        ((Table)surface["color"])["b"] = b;
+                        ((Table)surface["color"])["a"] = a;
+                    } catch (Exception ex) {
+                        return DynValue.NewString(ex.ToString());
+                    }
+                    return DynValue.Nil;
+                } catch (Exception ex) {
+                    return DynValue.NewString(ex.ToString());
+                }
+            });
+
+            surface["DrawLine"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                try {
+                    if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid hook.");
+                    int sx = arguments.AsInt(2, "surface.DrawLine");
+                    int sy = arguments.AsInt(3, "surface.DrawLine");
+                    int fx = arguments.AsInt(2, "surface.DrawLine");
+                    int fy = arguments.AsInt(3, "surface.DrawLine");
+                    try {
+                        Color clr = Color.FromArgb(
+                            (int) ((Table)surface["color"])["r"],
+                            (int) ((Table)surface["color"])["g"],
+                            (int) ((Table)surface["color"])["b"],
+                            (int) ((Table)surface["color"])["a"]
+                        );
+                        clr = Color.FromArgb(255, 255, 255);
+                        graphics.DrawLine(new Pen(new SolidBrush(clr), 5f), sx, sy, fx, fy);
+                    } catch (Exception ex) {
+                        return DynValue.NewString(ex.ToString());
+                    }
+                    return DynValue.Nil;
+                } catch (Exception ex) {
+                    return DynValue.NewString(ex.ToString());
+                }
+            });
+
+            _G.LuaState.Globals["surface"] = surface;
+
             Table hook = new Table(_G.LuaState);
 
             hook["Add"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {

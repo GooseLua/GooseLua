@@ -4,6 +4,11 @@ using System.Reflection;
 
 namespace GooseLua {
     class Util {
+        public static void Clamp(ref int num, int min, int max) {
+            if (num > max) num = max;
+            if (num < min) num = min;
+        }
+
         public static void MsgC(formLoader form, params dynamic[] args) {
             foreach (dynamic arg in args) {
                 if (arg is Color) {
