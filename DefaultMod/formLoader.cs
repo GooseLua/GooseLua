@@ -51,7 +51,7 @@ namespace GooseLua {
                     console.SelectionLength = 0;
                     console.SelectionColor = (Color) arg;
                 } else {
-                    console.AppendText(((ObjectHandle) arg).Unwrap().ToString());
+                    console.AppendText(arg);
                     console.SelectionColor = console.ForeColor;
                 }
             }

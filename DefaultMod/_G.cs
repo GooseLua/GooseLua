@@ -11,9 +11,6 @@ namespace GooseLua {
         public static Hook hook = new Hook();
 
         public static void RunString(string code) {
-            code = code.Replace(" || ", " or ");
-            code = code.Replace(" && ", " and ");
-            code = code.Replace("!", "not");
             try {
                 LuaState.DoString(code);
             } catch (ScriptRuntimeException ex) {

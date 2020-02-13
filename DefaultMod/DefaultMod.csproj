@@ -238,6 +238,7 @@
     <EmbeddedResource Include="Includes\string.lua" />
     <EmbeddedResource Include="Includes\bit.lua" />
     <EmbeddedResource Include="Includes\concommand.lua" />
+    <EmbeddedResource Include="Includes\color.lua" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

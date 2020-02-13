@@ -61,7 +61,7 @@ function math.EaseInOut( fProgress, fEaseIn, fEaseOut )
 	if ( fEaseIn == nil ) then fEaseIn = 0 end
 	if ( fEaseOut == nil ) then fEaseOut = 1 end
 
-	if ( fProgress == 0 || fProgress == 1 ) then return fProgress end
+	if ( fProgress == 0 or fProgress == 1 ) then return fProgress end
 
 	local fSumEase = fEaseIn + fEaseOut
 
@@ -90,7 +90,7 @@ function math.calcBSplineN( i, k, t, tinc )
 
 	if ( k == 1 ) then
 
-		if ( ( KNOT( i, tinc ) <= t ) && ( t < KNOT( i + 1, tinc ) ) ) then
+		if ( ( KNOT( i, tinc ) <= t ) and ( t < KNOT( i + 1, tinc ) ) ) then
 
 			return 1
 
