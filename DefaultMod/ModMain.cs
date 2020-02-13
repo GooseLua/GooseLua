@@ -1,5 +1,4 @@
-﻿using GooseLua.Lua;
-using GooseShared;
+﻿using GooseShared;
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,7 @@ using System.Threading;
 
 namespace GooseLua {
     public class ModEntryPoint : IMod {
+        public static formLoader form = new formLoader();
         Graphics graphics;
 
         void IMod.Init() {
@@ -66,13 +66,21 @@ namespace GooseLua {
 
             _G.LuaState.Globals["hook"] = hook;
 
+            _G.LuaState.Globals["Msg"] = _G.LuaState.Globals["print"];
+
+
+            _G.LuaState.Globals["AddConsoleCommand"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                return DynValue.Nil;
+            });
+
             Util.include("math");
             Util.include("string");
             Util.include("table");
+            Util.include("bit");
+            Util.include("color");
+            Util.include("concommand");
 
-            _G.LuaState.Globals["_G"] = _G.LuaState.Globals;
-
-            new Thread(new ThreadStart(() => new formLoader().ShowDialog())).Start();
+            new Thread(new ThreadStart(() => form.ShowDialog())).Start();
 
             InjectionPoints.PreTickEvent += preTick;
             InjectionPoints.PostTickEvent += postTick;
@@ -104,6 +112,8 @@ namespace GooseLua {
                 return DynValue.Nil;
             });
             _G.LuaState.Globals["Goose"] = goose;
+
+            _G.LuaState.Globals["_G"] = _G.LuaState.Globals;
         }
 
         public void callHooks(string hook) {

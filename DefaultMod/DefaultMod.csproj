@@ -236,6 +236,8 @@
     <EmbeddedResource Include="Includes\math.lua" />
     <EmbeddedResource Include="Includes\table.lua" />
     <EmbeddedResource Include="Includes\string.lua" />
+    <EmbeddedResource Include="Includes\bit.lua" />
+    <EmbeddedResource Include="Includes\concommand.lua" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

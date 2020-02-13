@@ -1,6 +1,7 @@
 ﻿using GooseLua.Lua;
 using GooseShared;
 using MoonSharp.Interpreter;
+using System.Drawing;
 
 namespace GooseLua {
     class _G {
@@ -12,6 +13,12 @@ namespace GooseLua {
         public static void RunString(string code) {
             code = code.Replace(" || ", " or ");
             code = code.Replace(" && ", " and ");
+            code = code.Replace("!", "not");
+            try {
+                LuaState.DoString(code);
+            } catch (ScriptRuntimeException ex) {
+                ModEntryPoint.form.MsgC(Color.FromArgb(0, 0, 0), "Doh! An error occured! {0}", ex.DecoratedMessage);
+            }
         }
     }
 }
