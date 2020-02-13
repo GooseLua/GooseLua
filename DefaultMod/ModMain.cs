@@ -66,6 +66,10 @@ namespace GooseLua {
 
             _G.LuaState.Globals["hook"] = hook;
 
+            Util.include("math");
+            Util.include("string");
+            Util.include("table");
+
             _G.LuaState.Globals["_G"] = _G.LuaState.Globals;
 
             new Thread(new ThreadStart(() => new formLoader().ShowDialog())).Start();

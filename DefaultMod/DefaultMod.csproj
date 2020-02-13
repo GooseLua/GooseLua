@@ -220,6 +220,7 @@
     </Compile>
     <Compile Include="Lua\Hook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ModMain.cs" />
     <Compile Include="_G.cs" />
@@ -232,6 +233,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <EmbeddedResource Include="Includes\math.lua" />
+    <EmbeddedResource Include="Includes\table.lua" />
+    <EmbeddedResource Include="Includes\string.lua" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
