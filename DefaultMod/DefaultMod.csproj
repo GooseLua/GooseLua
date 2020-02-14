@@ -87,7 +87,7 @@
     <Compile Include="Util.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ModMain.cs" />
-    <Compile Include="_G.cs" />
+    <Compile Include="Globals.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GooseModdingAPI\GooseModdingAPI.csproj">

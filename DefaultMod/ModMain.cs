@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace GooseLua {
     public class ModEntryPoint : IMod {
-        public static formLoader form = new formLoader();
+        public static formLoader form;
         Graphics graphics;
 
         [DllImport("user32.dll")]
@@ -242,7 +242,13 @@ namespace GooseLua {
 
         public void callHooks(string hook) {
             foreach (Closure func in _G.hook.hooks[hook].Values) {
+                try {
                 func.Call();
+                } catch(ScriptRuntimeException ex) {
+                    Util.MsgC(form, Color.FromArgb(255, 0, 0), string.Format("[ERROR] {0}: {1}\r\n{2}", ex.Source, ex.DecoratedMessage, ex.StackTrace), "\r\n");
+                } catch(Exception ex) {
+                    MessageBox.Show(ex.ToString(), ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

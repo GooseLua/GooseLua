@@ -17,10 +17,10 @@ namespace GooseLua {
                     form.console.SelectionColor = (Color)arg;
                 } else {
                     form.console.AppendText(arg);
-                    form.console.SelectionColor = form.console.ForeColor;
                 }
             }
-            form.console.SelectionStart = form.console.Text.Length;
+            form.console.SelectionColor = form.console.ForeColor;
+            form.console.SelectionStart = form.console.TextLength;
             form.console.ScrollToCaret();
         }
 

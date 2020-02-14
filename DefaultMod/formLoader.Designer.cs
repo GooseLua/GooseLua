@@ -22,7 +22,6 @@
             this.components = new System.ComponentModel.Container();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.metroPanel1 = new MetroFramework.Controls.MetroPanel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.modList = new System.Windows.Forms.ListBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -31,8 +30,9 @@
             this.metroTextBox1 = new MetroFramework.Controls.MetroTextBox();
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
+            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.metroTabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.metroPanel3.SuspendLayout();
@@ -47,42 +47,27 @@
             this.metroTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroTabControl1.Location = new System.Drawing.Point(20, 60);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 2;
-            this.metroTabControl1.Size = new System.Drawing.Size(760, 370);
+            this.metroTabControl1.SelectedIndex = 0;
+            this.metroTabControl1.Size = new System.Drawing.Size(760, 351);
             this.metroTabControl1.TabIndex = 1;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.metroTabControl1.UseSelectable = true;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.metroPanel1);
+            this.tabPage1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this.tabPage1.Location = new System.Drawing.Point(4, 38);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(752, 328);
+            this.tabPage1.Size = new System.Drawing.Size(752, 309);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
-            // 
-            // metroPanel1
-            // 
-            this.metroPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.metroPanel1.HorizontalScrollbarBarColor = true;
-            this.metroPanel1.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroPanel1.HorizontalScrollbarSize = 10;
-            this.metroPanel1.Location = new System.Drawing.Point(0, 0);
-            this.metroPanel1.Name = "metroPanel1";
-            this.metroPanel1.Size = new System.Drawing.Size(752, 328);
-            this.metroPanel1.TabIndex = 0;
-            this.metroPanel1.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.metroPanel1.VerticalScrollbarBarColor = true;
-            this.metroPanel1.VerticalScrollbarHighlightOnWheel = false;
-            this.metroPanel1.VerticalScrollbarSize = 10;
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.modList);
             this.tabPage2.Location = new System.Drawing.Point(4, 38);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(752, 328);
+            this.tabPage2.Size = new System.Drawing.Size(752, 309);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Installed Mods";
             // 
@@ -98,7 +83,7 @@
             this.modList.ItemHeight = 15;
             this.modList.Location = new System.Drawing.Point(0, 0);
             this.modList.Name = "modList";
-            this.modList.Size = new System.Drawing.Size(752, 328);
+            this.modList.Size = new System.Drawing.Size(752, 309);
             this.modList.TabIndex = 0;
             // 
             // tabPage3
@@ -106,7 +91,7 @@
             this.tabPage3.Controls.Add(this.metroPanel3);
             this.tabPage3.Location = new System.Drawing.Point(4, 38);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(752, 328);
+            this.tabPage3.Size = new System.Drawing.Size(752, 309);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Console";
             // 
@@ -120,7 +105,7 @@
             this.metroPanel3.HorizontalScrollbarSize = 10;
             this.metroPanel3.Location = new System.Drawing.Point(0, 0);
             this.metroPanel3.Name = "metroPanel3";
-            this.metroPanel3.Size = new System.Drawing.Size(752, 328);
+            this.metroPanel3.Size = new System.Drawing.Size(752, 309);
             this.metroPanel3.TabIndex = 1;
             this.metroPanel3.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.metroPanel3.VerticalScrollbarBarColor = true;
@@ -130,7 +115,7 @@
             // _console
             // 
             this.metroStyleExtender1.SetApplyMetroTheme(this._console, true);
-            this._console.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            this._console.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
             this._console.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this._console.DetectUrls = false;
             this._console.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -138,7 +123,7 @@
             this._console.Location = new System.Drawing.Point(0, 0);
             this._console.Name = "_console";
             this._console.ReadOnly = true;
-            this._console.Size = new System.Drawing.Size(752, 305);
+            this._console.Size = new System.Drawing.Size(752, 286);
             this._console.TabIndex = 2;
             this._console.Text = "";
             // 
@@ -161,7 +146,7 @@
             this.metroTextBox1.ForeColor = System.Drawing.Color.White;
             this.metroTextBox1.Lines = new string[] {
         "help"};
-            this.metroTextBox1.Location = new System.Drawing.Point(0, 305);
+            this.metroTextBox1.Location = new System.Drawing.Point(0, 286);
             this.metroTextBox1.MaxLength = 32767;
             this.metroTextBox1.Name = "metroTextBox1";
             this.metroTextBox1.PasswordChar = '\0';
@@ -188,24 +173,40 @@
             this.metroStyleManager1.Owner = this;
             this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
+            // metroLabel1
+            // 
+            this.metroLabel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.metroLabel1.Location = new System.Drawing.Point(20, 411);
+            this.metroLabel1.Name = "metroLabel1";
+            this.metroLabel1.Size = new System.Drawing.Size(760, 19);
+            this.metroLabel1.TabIndex = 0;
+            this.metroLabel1.Text = "[23:48:01] Active Users: 0";
+            this.metroLabel1.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // formLoader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.metroTabControl1);
+            this.Controls.Add(this.metroLabel1);
             this.Font = new System.Drawing.Font("Segoe UI Light", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.Name = "formLoader";
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.DropShadow;
             this.ShowIcon = false;
-            this.Text = "Desktop Goose // Lua Modloader";
+            this.Text = "Goose Lua // Lua Modloader";
             this.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formLoader_FormClosing);
             this.Load += new System.EventHandler(this.formLoader_Load);
             this.metroTabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.metroPanel3.ResumeLayout(false);
@@ -221,12 +222,13 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
-        private MetroFramework.Controls.MetroPanel metroPanel1;
         private MetroFramework.Controls.MetroPanel metroPanel3;
         private MetroFramework.Components.MetroStyleExtender metroStyleExtender1;
         private MetroFramework.Components.MetroStyleManager metroStyleManager1;
         private System.Windows.Forms.RichTextBox _console;
         private System.Windows.Forms.ListBox modList;
         private MetroFramework.Controls.MetroTextBox metroTextBox1;
+        private MetroFramework.Controls.MetroLabel metroLabel1;
+        private System.Windows.Forms.Timer timer1;
     }
 }

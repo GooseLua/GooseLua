@@ -36,6 +36,16 @@ function IsColor( obj )
 
 end
 
+function ColorRand(alpha)
+	local r = math.random() * 255
+	local g = math.random() * 255
+	local b = math.random() * 255
+	local a = 0
+	if alpha == true then
+		a = math.random() * 255
+	end
+	return Color(r,g,b,a)
+end
 
 --[[---------------------------------------------------------
 	Returns color as a string

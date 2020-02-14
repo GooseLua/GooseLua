@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 
@@ -94,6 +95,25 @@ namespace GooseLua {
             get {
                 return _console;
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e) {
+            string users = "0";
+            try {
+                using(WebClient wc = new WebClient()) {
+                    users = wc.DownloadString(_G.ApiURL + "users");
+                }
+            } catch {
+                users = "API Seems to be down.";
+            }
+            DateTime date = DateTime.Now;
+            string ap = "A";
+            int twelveHour = date.Hour;
+            if(twelveHour > 12) { ap = "P"; twelveHour -= 12; }
+            string h = twelveHour.ToString().PadLeft(2, '0');
+            string m = date.Minute.ToString().PadLeft(2, '0');
+            string time = $"{h}:{m} {ap}M";
+            metroLabel1.Text = string.Format("[{0}] Active Users: {1}", time, users);
         }
     }
 }
