@@ -3,6 +3,7 @@ using GooseShared;
 using MoonSharp.Interpreter;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography;
 
 namespace GooseLua {
     class _G {
