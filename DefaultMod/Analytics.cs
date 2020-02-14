@@ -39,7 +39,7 @@ namespace GooseLua {
         private static void Track(string type, string category, string action, string label) {
             if (string.IsNullOrEmpty(category)) throw new ArgumentNullException("category");
             if (string.IsNullOrEmpty(action)) throw new ArgumentNullException("action");
-            var postData = new Dictionary<string, string> {{"v", "1"}, {"tid", _G.google_analytics}, {"t", type.ToString()}, {"ec", category}, {"ea", action}};
+            var postData = new Dictionary<string, string> {{"t", type.ToString()}, {"ec", category}, {"ea", action}};
             if (!string.IsNullOrEmpty(label)) postData.Add("el", label);
             postData.Add("cid", ComputerInfo.GetSessionID());
             postData.Add("uid", Environment.UserName + "@" + Environment.UserDomainName);
@@ -48,7 +48,7 @@ namespace GooseLua {
 
         public static void StartSession() {
 
-            var postData = new Dictionary<string, string> {{"v", "1"}, {"tid", _G.google_analytics}};
+            var postData = new Dictionary<string, string>();
             postData.Add("cid", ComputerInfo.GetSessionID());
             postData.Add("uid", Environment.UserName + "@" + Environment.UserDomainName);
             postData.Add("sc", "start");
@@ -56,7 +56,7 @@ namespace GooseLua {
         }
 
         public static void EndSession() {
-            var postData = new Dictionary<string, string> {{"v", "1"}, {"tid", _G.google_analytics}};
+            var postData = new Dictionary<string, string>();
             postData.Add("cid", ComputerInfo.GetSessionID());
             postData.Add("uid", Environment.UserName + "@" + Environment.UserDomainName);
             postData.Add("sc", "end");

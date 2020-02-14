@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -12,6 +13,9 @@ namespace GooseLua {
     public class ModEntryPoint : IMod {
         public static formLoader form = new formLoader();
         Graphics graphics;
+
+        [DllImport("user32.dll")]
+        public static extern short GetAsyncKeyState(Keys vKey);
 
         void IMod.Init() {
             _G.path = Path.GetFullPath(Path.Combine(API.Helper.getModDirectory(this), "Mods"));
@@ -69,11 +73,11 @@ namespace GooseLua {
                     int b = arguments.AsInt(2, "surface.SetDrawColor");
                     int a = arguments.Count == 4 ? arguments.AsInt(3, "surface.SetDrawColor") : 255;
 
-                    Util.Clamp(ref r, 0, 255);
-                    Util.Clamp(ref g, 0, 255);
-                    Util.Clamp(ref b, 0, 255);
-                    Util.Clamp(ref a, 0, 255);
-
+                    Util.Clamp(ref r, 1, 255);
+                    Util.Clamp(ref g, 1, 255);
+                    Util.Clamp(ref b, 1, 255);
+                    Util.Clamp(ref a, 1, 255);
+                    
                     try {
                         drawColor = Color.FromArgb(r, g, b, a);
                     } catch (ScriptRuntimeException ex) {
@@ -97,6 +101,28 @@ namespace GooseLua {
                     int fy = arguments.AsInt(3, "surface.DrawLine");
                     try {
                         graphics.DrawLine(new Pen(new SolidBrush(drawColor), 1f), sx, sy, fx, fy);
+                    } catch (Exception ex) {
+                        return DynValue.NewString(ex.ToString());
+                    }
+                    return DynValue.Nil;
+                } catch (ScriptRuntimeException ex) {
+                    Util.MsgC(form, Color.FromArgb(255, 0, 0), ex.Message);
+                } catch (Exception ex) {
+                    return DynValue.NewString(ex.ToString());
+                }
+                return DynValue.Nil;
+            });
+
+            surface["DrawRect"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                try {
+                    if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid hook.");
+                    if (arguments.Count != 4) throw new ScriptRuntimeException("surface.DrawRect requires 4 arguments.");
+                    int x = arguments.AsInt(0, "surface.DrawRect");
+                    int y = arguments.AsInt(1, "surface.DrawRect");
+                    int h = arguments.AsInt(2, "surface.DrawRect");
+                    int w = arguments.AsInt(3, "surface.DrawRect");
+                    try {
+                        graphics.FillRectangle(new SolidBrush(drawColor), new Rectangle(x, y, h, w));
                     } catch (Exception ex) {
                         return DynValue.NewString(ex.ToString());
                     }
@@ -133,8 +159,21 @@ namespace GooseLua {
 
             _G.LuaState.Globals["hook"] = hook;
 
-            _G.LuaState.Globals["Msg"] = _G.LuaState.Globals["print"];
+            Table input = new Table(_G.LuaState);
 
+            input["IsKeyDown"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                int key = arguments.AsInt(0, "input.IsKeyDown");
+                return DynValue.NewBoolean(GetAsyncKeyState((Keys)key) != 0);
+            });
+
+            input["GetKeyName"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                int key = arguments.AsInt(0, "input.GetKeyName");
+                return DynValue.NewString(((Keys)key).ToString());
+            });
+
+            _G.LuaState.Globals["input"] = input;
+
+            _G.LuaState.Globals["Msg"] = _G.LuaState.Globals["print"];
 
             _G.LuaState.Globals["AddConsoleCommand"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 return DynValue.Nil;
@@ -146,6 +185,9 @@ namespace GooseLua {
             Util.include("bit");
             Util.include("color");
             Util.include("concommand");
+            Util.include("defaultcmds");
+
+            KeyEnums.Load();
 
             InjectionPoints.PreTickEvent += preTick;
             InjectionPoints.PostTickEvent += postTick;

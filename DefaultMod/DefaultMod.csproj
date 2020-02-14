@@ -81,6 +81,7 @@
       <DependentUpon>formLoader.cs</DependentUpon>
     </Compile>
     <Compile Include="Analytics.cs" />
+    <Compile Include="Keys.cs" />
     <Compile Include="Lua\Hook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
@@ -102,6 +103,7 @@
     <EmbeddedResource Include="Includes\bit.lua" />
     <EmbeddedResource Include="Includes\concommand.lua" />
     <EmbeddedResource Include="Includes\color.lua" />
+    <EmbeddedResource Include="Includes\defaultcmds.lua" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

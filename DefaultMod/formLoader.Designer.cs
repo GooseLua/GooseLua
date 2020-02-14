@@ -199,7 +199,6 @@
             this.Name = "formLoader";
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.DropShadow;
             this.ShowIcon = false;
-            this.ShowInTaskbar = false;
             this.Text = "Desktop Goose // Lua Modloader";
             this.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.TopMost = true;

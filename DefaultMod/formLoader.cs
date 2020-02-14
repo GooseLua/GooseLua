@@ -85,7 +85,7 @@ namespace GooseLua {
                 int len = argstable.Length;
                 if (args.Count > 0) argstable = argstable.Substring(0, len - 2);
                 argstable += '}';
-                _G.luaQueue.Add("print(\"] " + safe + "\") concommand.Run(\"" + safe + "\", " + argstable + ")");
+                _G.luaQueue.Add("print(\"] " + safe + " " + string.Join(" ", args) + "\") concommand.Run(\"" + safe + "\", " + argstable + ")");
                 metroTextBox1.Clear();
             }
         }
