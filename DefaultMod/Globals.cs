@@ -20,7 +20,7 @@ namespace GooseLua {
             return SessionID;
         }
 
-        private static string GenerateSessionID(int length = 16, string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_") {
+        private static string GenerateSessionID(int length = 16, string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890") {
             using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider()) {
                 byte[] data = new byte[length];
                 byte[] buffer = null;

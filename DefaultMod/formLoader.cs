@@ -1,10 +1,12 @@
-﻿using MoonSharp.Interpreter;
+﻿using GooseShared;
+using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace GooseLua {
@@ -13,6 +15,7 @@ namespace GooseLua {
             InitializeComponent();
             Analytics.StartSession();
             Util.MsgC(this, Script.GetBanner("Goose Lua"));
+            label1.Text = string.Format(label1.Text, Script.LUA_VERSION, Script.VERSION);
         }
 
         private void formLoader_Load(object sender, EventArgs e) {
@@ -45,6 +48,14 @@ namespace GooseLua {
                 Util.MsgC(this, args + "\r\n");
                 return DynValue.Nil;
             });
+
+            _G.LuaState.Globals[$"clear_{_G.GetSessionID()}"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                console.Clear();
+                Util.MsgC(this, Script.GetBanner("Goose Lua"));
+                return DynValue.Nil;
+            });
+
+            _G.RunString($"concommand.Add(\"clear\", function() clear_{_G.GetSessionID()}() end)");
 
             _G.LuaState.Options.DebugPrint = s => {
                 console.AppendText(s + "\r\n");
@@ -97,11 +108,11 @@ namespace GooseLua {
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e) {
+        private async void timer1_Tick(object sender, EventArgs e) {
             string users = "0";
             try {
                 using(WebClient wc = new WebClient()) {
-                    users = wc.DownloadString(_G.ApiURL + "users");
+                    users = await wc.DownloadStringTaskAsync(_G.ApiURL + "users");
                 }
             } catch {
                 users = "API Seems to be down.";
@@ -114,6 +125,10 @@ namespace GooseLua {
             string m = date.Minute.ToString().PadLeft(2, '0');
             string time = $"{h}:{m} {ap}M";
             metroLabel1.Text = string.Format("[{0}] Active Users: {1}", time, users);
+        }
+
+        private void metroLabel2_Click(object sender, EventArgs e) {
+            API.Goose.playHonckSound();
         }
     }
 }

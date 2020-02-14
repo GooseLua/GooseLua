@@ -45,7 +45,7 @@ namespace GooseLua {
                     int x = arguments.Count > 2 ? arguments.AsInt(2, "draw.SimpleText") : 0;
                     int y = arguments.Count > 3 ? arguments.AsInt(3, "draw.SimpleText") : 0;
                     try {
-                        graphics.DrawString(text, new Font(font, 8f), Brushes.White, new PointF(x, y));
+                        graphics.DrawString(text, new Font(font, 12f), Brushes.White, new PointF(x, y));
                     } catch (Exception ex) {
                         return DynValue.NewString(ex.Message);
                     }
@@ -57,6 +57,8 @@ namespace GooseLua {
                 }
                 return DynValue.Nil;
             });
+
+            draw["SimpleTextOutlined"] = (CallbackFunction)draw["SimpleText"];
 
             _G.LuaState.Globals["draw"] = draw;
 
