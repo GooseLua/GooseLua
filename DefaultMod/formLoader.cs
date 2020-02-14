@@ -2,6 +2,7 @@
 using MoonSharp.Interpreter;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -129,6 +130,14 @@ namespace GooseLua {
 
         private void metroLabel2_Click(object sender, EventArgs e) {
             API.Goose.playHonckSound();
+        }
+
+        private void metroButton1_Click(object sender, EventArgs e) {
+            Process.Start(_G.ApiURL);
+        }
+
+        private void metroButton2_Click(object sender, EventArgs e) {
+            Process.Start(_G.ApiURL + "/discord");
         }
     }
 }

@@ -181,6 +181,33 @@ namespace GooseLua {
                 return DynValue.Nil;
             });
 
+            _G.LuaState.Globals["Derma_StringRequest"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                string title = arguments.AsStringUsingMeta(context, 0, "Derma_StringRequest");
+                string subtitle = arguments.AsStringUsingMeta(context, 1, "Derma_StringRequest");
+                string value = arguments.AsStringUsingMeta(context, 2, "Derma_StringRequest");
+                Closure confirm = arguments[3].Function;
+                Closure cancel = arguments.Count > 4 ? arguments[4].Function : default(Closure);
+                string confirmText = arguments.Count > 5 ? arguments.AsStringUsingMeta(context, 5, "Derma_StringRequest") : "OK";
+                string cancelText = arguments.Count > 6 ? arguments.AsStringUsingMeta(context, 6, "Derma_StringRequest") : "Cancel";
+                DialogResult res = _G.InputBox(ref value, title, subtitle, confirmText, cancelText);
+                if (res == DialogResult.Cancel) {
+                    if (cancel != default(Closure)) {
+                        cancel.Call();
+                    }
+                } else if (res == DialogResult.OK) {
+                    confirm.Call(DynValue.NewString(value));
+                }
+                return DynValue.Nil;
+            });
+
+            _G.LuaState.Globals["Derma_Message"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                string text = arguments.AsStringUsingMeta(context, 0, "Derma_Message");
+                string title = arguments.AsStringUsingMeta(context, 1, "Derma_Message");
+                string confirm = arguments.AsStringUsingMeta(context, 2, "Derma_Message");
+                _G.MessageBox(text, title, confirm);
+                return DynValue.Nil;
+            });
+
             Util.include("math");
             Util.include("string");
             Util.include("table");
@@ -213,8 +240,9 @@ namespace GooseLua {
 
         public void timerTick(object s, EventArgs e) {
             if (_G.luaQueue.Count > 0) {
-                _G.LuaState.DoString(_G.luaQueue[0]);
+                string lua = _G.luaQueue[0];
                 _G.luaQueue.RemoveAt(0);
+                _G.LuaState.DoString(lua);
             }
         }
 
