@@ -64,11 +64,11 @@ namespace GooseLua {
             "TextBox textBox = new TextBox();" +
             "Button buttonOk = new Button();" +
             "Button buttonCancel = new Button();" +
-            "form.Text = \"" + title + "\";" +
-            "label.Text = \"" + subtitle + "\";" +
-            "textBox.Text = \"" + value + "\";" +
-            "buttonOk.Text = \"" + confirm + "\";" +
-            "buttonCancel.Text = \"" + cancel + "\";" +
+            "form.Text = \"" + title.Replace("\"", "''") + "\";" +
+            "label.Text = \"" + subtitle.Replace("\"", "''") + "\";" +
+            "textBox.Text = \"" + value.Replace("\"", "''") + "\";" +
+            "buttonOk.Text = \"" + confirm.Replace("\"", "''") + "\";" +
+            "buttonCancel.Text = \"" + cancel.Replace("\"", "''") + "\";" +
             "buttonOk.DialogResult = DialogResult.OK;" +
             "buttonCancel.DialogResult = DialogResult.Cancel;" +
             "label.SetBounds(9, 20, 372, 13);" +
@@ -101,9 +101,9 @@ namespace GooseLua {
             string code = "Form form = new Form();" +
             "Label label = new Label();" +
             "Button buttonOk = new Button();" +
-            "form.Text = \"" + title + "\";" +
-            "label.Text = \"" + text+ "\";" +
-            "buttonOk.Text = \"" + confirm + "\";" +
+            "form.Text = \"" + title.Replace("\"", "''") + "\";" +
+            "label.Text = \"" + text.Replace("\"", "''") + "\";" +
+            "buttonOk.Text = \"" + confirm.Replace("\"", "''") + "\";" +
             "buttonOk.DialogResult = DialogResult.OK;" +
             "label.SetBounds(9, 20, 372, 13);" +
             "buttonOk.SetBounds(228, 100, 75, 23);" +
