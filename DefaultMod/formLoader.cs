@@ -16,15 +16,38 @@ namespace GooseLua {
 
         private void formLoader_Load(object sender, EventArgs e) {
             if (!Directory.Exists(_G.path)) Directory.CreateDirectory(_G.path);
-
-            _G.LuaState.Globals["print"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                for(int i = 0;i<arguments.Count;i++) {
-                    console.AppendText(arguments.AsStringUsingMeta(context, i, "print"));
-                    if (i + 1 < arguments.Count) console.Text += "   ";
+            _G.LuaState.Globals["MsgC"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                List<dynamic> args = new List<dynamic>();
+                for (int i = 0; i < arguments.Count; i++) {
+                    DynValue arg = arguments.RawGet(i, true);
+                    if (arg == DynValue.Nil) continue;
+                    if (arg.Table.MetaTable["Color"] != null) {
+                        int r = (int)((Table)arg.Table.MetaTable["Color"])["r"];
+                        int g = (int)((Table)arg.Table.MetaTable["Color"])["g"];
+                        int b = (int)((Table)arg.Table.MetaTable["Color"])["b"];
+                        int a = (int)((Table)arg.Table.MetaTable["Color"])["a"];
+                        args.Add(Color.FromArgb(r, g, b, a));
+                    }
+                    args.Add(arg);
                 }
-                console.AppendText("\r\n");
+                Util.MsgC(this, args);
                 return DynValue.Nil;
             });
+
+            _G.LuaState.Globals["Msg"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                List<dynamic> args = new List<dynamic>();
+                for (int i = 0; i < arguments.Count; i++) {
+                    DynValue arg = arguments.RawGet(i, true);
+                    if (arg == DynValue.Nil) continue;
+                    args.Add(arg);
+                }
+                Util.MsgC(this, args + "\r\n");
+                return DynValue.Nil;
+            });
+
+            _G.LuaState.Options.DebugPrint = s => {
+                console.AppendText(s + "\r\n");
+            };
 
             string[] files = Directory.GetFiles(_G.path, "*.lua");
             foreach (string mod in files) {
@@ -62,7 +85,7 @@ namespace GooseLua {
                 int len = argstable.Length;
                 if (args.Count > 0) argstable = argstable.Substring(0, len - 2);
                 argstable += '}';
-                _G.luaQueue.Add("concommand.Run(\"" + safe + "\", " + argstable + ")");
+                _G.luaQueue.Add("print(\"] " + safe + "\") concommand.Run(\"" + safe + "\", " + argstable + ")");
                 metroTextBox1.Clear();
             }
         }

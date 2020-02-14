@@ -13,10 +13,6 @@ namespace GooseLua {
             Track("event", category, action, label);
         }
 
-        public static void TrackPageview(string category, string action, string label) {
-            Track("pageview", category, action, label);
-        }
-
         private static void sendRequest(Dictionary<string, string> postData) {
             var postDataString = postData.Aggregate("", (data, next) => string.Format("{0}&{1}={2}", data, next.Key, HttpUtility.UrlEncode(next.Value))).TrimEnd('&');
 
@@ -32,7 +28,7 @@ namespace GooseLua {
             try {
                 var webResponse = (HttpWebResponse)request.GetResponse();
                 if (webResponse.StatusCode != HttpStatusCode.OK) {
-                    throw new HttpException((int)webResponse.StatusCode, "Google Analytics tracking did not return OK 200");
+                    throw new HttpException((int)webResponse.StatusCode, "Analytics tracking did not return OK 200");
                 }
                 webResponse.Close();
             } catch (Exception ex) {
