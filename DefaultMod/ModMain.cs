@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -205,6 +206,36 @@ namespace GooseLua {
                 string title = arguments.AsStringUsingMeta(context, 1, "Derma_Message");
                 string confirm = arguments.AsStringUsingMeta(context, 2, "Derma_Message");
                 _G.MessageBox(text, title, confirm);
+                return DynValue.Nil;
+            });
+
+            _G.LuaState.Globals["HTTP"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                Table args = arguments[0].Table;
+                if (args["url"] == null || args["method"] == null) throw new ScriptRuntimeException("Invalid request table.");
+
+                Action _ = async() => {
+                    string result = "";
+
+                    if ((string)args["method"] == "POST") {
+                        using (WebClient wc = new WebClient()) {
+                            wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                            result = await wc.DownloadStringTaskAsync($"{_G.ApiURL}analytics");
+                        }
+                    } else if ((string)args["method"] == "GET") {
+                        using (WebClient wc = new WebClient()) {
+                            result = await wc.DownloadStringTaskAsync((string) args["url"]);
+                        }
+                    } else {
+                        throw new ScriptRuntimeException($"Unsupported HTTP protocol \"{args["method"]}\".");
+                    }
+
+                    if(result.Trim() != "") {
+                        ((Closure)args["success"]).Call(result);
+                    }
+                };
+
+                _();
+
                 return DynValue.Nil;
             });
 
