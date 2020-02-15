@@ -23,7 +23,7 @@ function http.Fetch( url, onsuccess, onfailure, header )
 
 		success = function( code, body, headers )
 
-			if ( !onsuccess ) then return end
+			if ( not onsuccess ) then return end
 
 			onsuccess( body, body:len(), headers, code )
 
@@ -31,7 +31,7 @@ function http.Fetch( url, onsuccess, onfailure, header )
 
 		failed = function( err )
 
-			if ( !onfailure ) then return end
+			if ( not onfailure ) then return end
 
 			onfailure( err )
 
@@ -52,7 +52,7 @@ function http.Post( url, params, onsuccess, onfailure, header )
 
 		success = function( code, body, headers )
 
-			if ( !onsuccess ) then return end
+			if ( not onsuccess ) then return end
 
 			onsuccess( body, body:len(), headers, code )
 
@@ -60,7 +60,7 @@ function http.Post( url, params, onsuccess, onfailure, header )
 
 		failed = function( err )
 
-			if ( !onfailure ) then return end
+			if ( not onfailure ) then return end
 
 			onfailure( err )
 
