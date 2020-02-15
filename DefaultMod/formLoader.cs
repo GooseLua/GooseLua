@@ -50,6 +50,16 @@ namespace GooseLua {
                 return DynValue.Nil;
             });
 
+            _G.LuaState.Options.DebugPrint = s => {
+                console.AppendText(s + "\r\n");
+            };
+
+            for (int i = 0; i < 10; i++) {
+                _G.LuaState.Globals[$"clear_{_G.RandomString()}"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                    throw new ScriptRuntimeException("Attempted to clear console.");
+                });
+            }
+
             _G.LuaState.Globals[$"clear_{_G.GetSessionID()}"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 console.Clear();
                 Util.MsgC(this, Script.GetBanner("Goose Lua"));
@@ -57,10 +67,6 @@ namespace GooseLua {
             });
 
             _G.RunString($"concommand.Add(\"clear\", function() clear_{_G.GetSessionID()}() end)");
-
-            _G.LuaState.Options.DebugPrint = s => {
-                console.AppendText(s + "\r\n");
-            };
 
             string[] files = Directory.GetFiles(_G.path, "*.lua");
             foreach (string mod in files) {

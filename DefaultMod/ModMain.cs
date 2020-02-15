@@ -250,14 +250,14 @@ namespace GooseLua {
 
             KeyEnums.Load();
 
+            InjectionPoints.PreRenderEvent += updateGoose;
+
             InjectionPoints.PreTickEvent += preTick;
             InjectionPoints.PostTickEvent += postTick;
             InjectionPoints.PreRenderEvent += preRender;
             InjectionPoints.PostRenderEvent += postRender;
             InjectionPoints.PreUpdateRigEvent += preRig;
             InjectionPoints.PostUpdateRigEvent += postRig;
-
-            InjectionPoints.PreRenderEvent += updateGoose;
 
             new Thread(() => {
                 form = new formLoader();
@@ -291,21 +291,43 @@ namespace GooseLua {
                 g.targetPos = new SamEngine.Vector2(x, y);
                 return DynValue.Nil;
             });
+
             goose["setPosition"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 int x = arguments.Count > 0 ? arguments.AsInt(0, "Goose.setPosition") : 0;
                 int y = arguments.Count > 1 ? arguments.AsInt(1, "Goose.setPosition") : 0;
                 g.position = new SamEngine.Vector2(x, y);
                 return DynValue.Nil;
             });
-            _G.LuaState.Globals["Goose"] = goose;
 
-            _G.LuaState.Globals["_G"] = _G.LuaState.Globals;
+            goose["getTasks"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                Table tasks = new Table(_G.LuaState);
+                foreach (string task in API.TaskDatabase.getAllLoadedTaskIDs()) {
+                    tasks.Append(DynValue.NewString(task));
+                }
+                return DynValue.NewTable(tasks);
+            });
+
+            goose["setTask"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                string task = arguments.AsStringUsingMeta(context, 0, "Goose.setPosition");
+                bool honk = arguments.Count > 1 ? arguments.AsUserData<bool>(1, "Goose.setTask") : true;
+                bool valid = false;
+                foreach(string tsk in API.TaskDatabase.getAllLoadedTaskIDs()) {
+                    if(tsk == task) {
+                        valid = true;
+                    }
+                }
+                if (!valid) throw new ScriptRuntimeException("Unknown task \"" + task + "\".");
+                API.Goose.setCurrentTaskByID(g, task, honk);
+                return DynValue.Nil;
+            });
+
+            _G.LuaState.Globals["goose"] = goose;
         }
 
         public void callHooks(string hook) {
             foreach (Closure func in _G.hook.hooks[hook].Values) {
                 try {
-                func.Call();
+                    func.Call();
                 } catch(ScriptRuntimeException ex) {
                     Util.MsgC(form, Color.FromArgb(255, 0, 0), string.Format("[ERROR] {0}: {1}\r\n{2}", ex.Source, ex.DecoratedMessage, ex.StackTrace), "\r\n");
                 } catch(Exception ex) {

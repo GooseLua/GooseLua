@@ -1,4 +1,5 @@
 concommand.Add("help", function(cmd, args)
+	print("Currently available commands:")
 	for k,v in pairs(concommand.GetTable()) do
 		print(k)
 	end
