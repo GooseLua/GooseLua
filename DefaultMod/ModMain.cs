@@ -59,6 +59,23 @@ namespace GooseLua {
                 return DynValue.Nil;
             });
 
+            draw["GetFontHeight"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                try {
+                    if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid _G.hook.");
+                    string font = arguments.AsStringUsingMeta(context, 0, "draw.SimpleText");
+                    try {
+                        return DynValue.NewNumber(graphics.MeasureString("A", new Font(font, 12f)).Height);
+                    } catch (Exception ex) {
+                        return DynValue.NewString(ex.Message);
+                    }
+                } catch (ScriptRuntimeException ex) {
+                    Util.MsgC(form, Color.FromArgb(255, 0, 0), ex.Message);
+                } catch (Exception ex) {
+                    return DynValue.NewString(ex.ToString());
+                }
+                return DynValue.Nil;
+            });
+
             draw["SimpleTextOutlined"] = (CallbackFunction)draw["SimpleText"];
 
             _G.LuaState.Globals["draw"] = draw;
@@ -71,18 +88,17 @@ namespace GooseLua {
                 try {
                     if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid hook.");
                     if (arguments.Count < 3) throw new ScriptRuntimeException("surface.SetDrawColor requires 3 arguments.");
+                    if (arguments.Count > 3) throw new ScriptRuntimeException("surface.SetDrawColor requires 3 arguments.");
                     int r = arguments.AsInt(0, "surface.SetDrawColor");
                     int g = arguments.AsInt(1, "surface.SetDrawColor");
                     int b = arguments.AsInt(2, "surface.SetDrawColor");
-                    int a = arguments.Count == 4 ? arguments.AsInt(3, "surface.SetDrawColor") : 255;
 
                     Util.Clamp(ref r, 1, 255);
                     Util.Clamp(ref g, 1, 255);
                     Util.Clamp(ref b, 1, 255);
-                    Util.Clamp(ref a, 1, 255);
                     
                     try {
-                        drawColor = Color.FromArgb(r, g, b, a);
+                        drawColor = Color.FromArgb(r, g, b);
                     } catch (ScriptRuntimeException ex) {
                         Util.MsgC(form, Color.FromArgb(255, 0, 0), ex.Message);
                     } catch (Exception ex) {
@@ -274,7 +290,8 @@ namespace GooseLua {
             if (_G.luaQueue.Count > 0) {
                 string lua = _G.luaQueue[0];
                 _G.luaQueue.RemoveAt(0);
-                _G.LuaState.DoString(lua);
+                _G.RunString(lua);
+                
             }
         }
 
@@ -305,6 +322,10 @@ namespace GooseLua {
                     tasks.Append(DynValue.NewString(task));
                 }
                 return DynValue.NewTable(tasks);
+            });
+
+            goose["getTask"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                return DynValue.NewString(API.TaskDatabase.getAllLoadedTaskIDs()[g.currentTask]);
             });
 
             goose["setTask"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
