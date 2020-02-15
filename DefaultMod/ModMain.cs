@@ -239,6 +239,7 @@ namespace GooseLua {
                 return DynValue.Nil;
             });
 
+            Util.include("http");
             Util.include("math");
             Util.include("string");
             Util.include("table");

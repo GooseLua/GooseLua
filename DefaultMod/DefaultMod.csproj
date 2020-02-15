@@ -103,6 +103,7 @@
     <EmbeddedResource Include="Includes\concommand.lua" />
     <EmbeddedResource Include="Includes\color.lua" />
     <EmbeddedResource Include="Includes\defaultcmds.lua" />
+    <EmbeddedResource Include="Includes\http.lua" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
