@@ -19,7 +19,7 @@ namespace GooseLua {
         public static extern short GetAsyncKeyState(Keys vKey);
 
         void IMod.Init() {
-            _G.path = Path.GetFullPath(Path.Combine(API.Helper.getModDirectory(this), "Mods"));
+            _G.path = Path.GetFullPath(Path.Combine(API.Helper.getModDirectory(this), "..", "..", "Lua Mods"));
 
             _G.hook.hooks["preRig"] = new Dictionary<string, Closure>();
             _G.hook.hooks["postRig"] = new Dictionary<string, Closure>();
