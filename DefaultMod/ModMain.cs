@@ -269,7 +269,7 @@ namespace GooseLua {
             GooseProxy.Register();
             _G.LuaState.Globals["goose"] = new GooseProxy(_G.LuaState);
             _G.LuaState.Globals["GetModDirectory"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                return DynValue.NewString(API.Helper.getModDirectory(this));
+                return DynValue.NewString(_G.path);
             });
 
             InjectionPoints.PreTickEvent += preTick;
