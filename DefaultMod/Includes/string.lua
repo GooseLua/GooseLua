@@ -1,5 +1,6 @@
 local string = string
 local math = math
+local function isnumber(t) return type(t) == 'number' end
 
 --[[---------------------------------------------------------
 	Name: string.ToTable( string )

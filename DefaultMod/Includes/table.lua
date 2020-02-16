@@ -1,3 +1,10 @@
+local function istable(t) return type(t) == 'table' end
+local function isstring(t) return type(t) == 'string' end
+local function isnumber(t) return type(t) == 'number' end
+local function isbool(t) return type(t) == 'boolean' end
+local function ivector(t) return Vector ~= nil and getmetatable(t) == Vector end
+local function isangle(t) return Angle ~= nil and getmetatable(t) == Angle end
+
 --[[---------------------------------------------------------
 	Name: Inherit( t, base )
 	Desc: Copies any missing data from base to t
