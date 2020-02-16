@@ -49,15 +49,26 @@ namespace GooseLua
 {
     class GooseProxy
     {
-        private Script script => _G.LuaState;
+        private readonly Script script;
         private GooseEntity goose => _G.goose;
 
+        [MoonSharpHidden]
+        public GooseProxy(Script script)
+        {
+            this.script = script;
+            script.Globals["Speed"] = UserData.CreateStatic<GooseEntity.SpeedTiers>();
+            script.Globals["ScreenDirection"] = UserData.CreateStatic<ScreenDirection>();
+        }
+
+        [MoonSharpHidden]
         public static void Register()
         {
             UserData.RegisterType<GooseProxy>();
             UserData.RegisterType<VectorProxy>();
             UserData.RegisterType<RigProxy>();
             UserData.RegisterType<ProceduralFeetsProxy>();
+            UserData.RegisterType<ScreenDirection>();
+            UserData.RegisterType<GooseEntity.SpeedTiers>();
         }
 
         public DynValue Position
@@ -163,7 +174,7 @@ namespace GooseLua
             System.Console.WriteLine("Updating rig");
         }
 
-        #region Tasks
+        #region Goose Functions
         public string[] Tasks { get => GetTasks(); }
         
         public string Task
@@ -182,6 +193,41 @@ namespace GooseLua
             {
                 throw new ScriptRuntimeException("Unknown task \"" + taskName + "\".");
             }
+        }
+
+        public void ChooseRandomTask()
+        {
+            API.Goose.chooseRandomTask(goose);
+        }
+
+        public void Roam()
+        {
+            API.Goose.setTaskRoaming(goose);
+        }
+
+        public void Honk()
+        {
+            API.Goose.playHonckSound();
+        }
+
+        public void SetSpeed(GooseEntity.SpeedTiers tier)
+        {
+            API.Goose.setSpeed(goose, tier);
+        }
+
+        public ScreenDirection SetTargetOffscreen(bool canExitTop = false)
+        {
+            return API.Goose.setTargetOffscreen(goose, canExitTop);
+        }
+
+        public bool IsGooseAtTarget(float distance)
+        {
+            return API.Goose.isGooseAtTarget(goose, distance);
+        }
+
+        public float DistanceToTarget
+        {
+            get => API.Goose.getDistanceToTarget(goose);
         }
         #endregion
 
@@ -275,7 +321,7 @@ namespace GooseLua
         }
 
         /* Feets */
-        public DynValue feets;
+        public DynValue feets { get; private set; }
 
         /* Under Body*/
         public const int UnderBodyRadius = Rig.UnderBodyRadius;

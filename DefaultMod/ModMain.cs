@@ -267,7 +267,7 @@ namespace GooseLua {
             KeyEnums.Load();
 
             GooseProxy.Register();
-            _G.LuaState.Globals["goose"] = new GooseProxy();
+            _G.LuaState.Globals["goose"] = new GooseProxy(_G.LuaState);
 
             InjectionPoints.PreTickEvent += preTick;
             InjectionPoints.PostTickEvent += postTick;
