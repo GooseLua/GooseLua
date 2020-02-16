@@ -80,6 +80,7 @@
       <DependentUpon>formLoader.cs</DependentUpon>
     </Compile>
     <Compile Include="Analytics.cs" />
+    <Compile Include="GooseProxy.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="Lua\Hook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

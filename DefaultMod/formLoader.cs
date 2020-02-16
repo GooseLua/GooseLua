@@ -80,7 +80,8 @@ namespace GooseLua {
                 int len = modFile.Length;
                 modList.Items.Add(modFile.Substring(0, len - 4));
                 try {
-                    _G.luaQueue.Add(File.ReadAllText(mod));
+                    string code = File.ReadAllText(mod);
+                    _G.RunString(code, modFile);
                 } catch (ScriptRuntimeException ex) {
                     Util.MsgC(this, Color.FromArgb(255, 0, 0), string.Format("Doh! An error occured! {0}", ex.DecoratedMessage), "\r\n");
                 }
@@ -112,7 +113,8 @@ namespace GooseLua {
                 int len = argstable.Length;
                 if (args.Count > 0) argstable = argstable.Substring(0, len - 2);
                 argstable += '}';
-                _G.luaQueue.Add("print(\"] " + safe + " " + string.Join(" ", args) + "\") concommand.Run(\"" + safe + "\", " + argstable + ")");
+                string code = "print(\"] " + safe + " " + string.Join(" ", args) + "\") concommand.Run(\"" + safe + "\", " + argstable + ")";
+                _G.RunString(code, "console");
                 metroTextBox1.Clear();
             }
         }
