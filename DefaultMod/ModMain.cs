@@ -275,10 +275,12 @@ namespace GooseLua {
             InjectionPoints.PreUpdateRigEvent += preRig;
             InjectionPoints.PostUpdateRigEvent += postRig;
 
-            new Thread(() => {
+            Thread thread = new Thread(() => {
                 form = new formLoader();
                 form.ShowDialog();
-            }).Start();
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
             timer.Tick += timerTick;

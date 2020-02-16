@@ -66,6 +66,12 @@ namespace GooseLua {
                 return DynValue.Nil;
             });
 
+            for (int i = 0; i < 10; i++) {
+                _G.LuaState.Globals[$"clear_{_G.RandomString()}"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                    throw new ScriptRuntimeException("Attempted to clear console.");
+                });
+            }
+
             _G.RunString($"concommand.Add(\"clear\", function() clear_{_G.GetSessionID()}() end)");
 
             string[] files = Directory.GetFiles(_G.path, "*.lua");
@@ -79,6 +85,8 @@ namespace GooseLua {
                     Util.MsgC(this, Color.FromArgb(255, 0, 0), string.Format("Doh! An error occured! {0}", ex.DecoratedMessage), "\r\n");
                 }
             }
+
+            //webBrowser1.Navigate("about:" + Util.getResource("GooseLua.editor.html"));
         }
 
         private void formLoader_FormClosing(object sender, FormClosingEventArgs e) {
@@ -144,6 +152,10 @@ namespace GooseLua {
 
         private void metroButton2_Click(object sender, EventArgs e) {
             Process.Start(_G.ApiURL + "/discord");
+        }
+
+        private void metroButton3_Click(object sender, EventArgs e) {
+            _G.RunString(metroTextBox2.Text);
         }
     }
 }

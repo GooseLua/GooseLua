@@ -22,9 +22,15 @@
             this.components = new System.ComponentModel.Container();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.metroButton2 = new MetroFramework.Controls.MetroButton();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.modList = new System.Windows.Forms.ListBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.metroPanel1 = new MetroFramework.Controls.MetroPanel();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
             this.metroPanel3 = new MetroFramework.Controls.MetroPanel();
             this._console = new System.Windows.Forms.RichTextBox();
             this.metroTextBox1 = new MetroFramework.Controls.MetroTextBox();
@@ -32,17 +38,17 @@
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.metroButton1 = new MetroFramework.Controls.MetroButton();
-            this.metroButton2 = new MetroFramework.Controls.MetroButton();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.metroTextBox2 = new MetroFramework.Controls.MetroTextBox();
+            this.metroButton3 = new MetroFramework.Controls.MetroButton();
             this.metroTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.metroPanel1.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.metroPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // metroTabControl1
@@ -50,10 +56,11 @@
             this.metroTabControl1.Controls.Add(this.tabPage1);
             this.metroTabControl1.Controls.Add(this.tabPage2);
             this.metroTabControl1.Controls.Add(this.tabPage3);
+            this.metroTabControl1.Controls.Add(this.tabPage4);
             this.metroTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroTabControl1.Location = new System.Drawing.Point(20, 60);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 1;
+            this.metroTabControl1.SelectedIndex = 2;
             this.metroTabControl1.Size = new System.Drawing.Size(760, 351);
             this.metroTabControl1.TabIndex = 1;
             this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Dark;
@@ -68,6 +75,51 @@
             this.tabPage1.Size = new System.Drawing.Size(752, 309);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.metroButton2);
+            this.panel1.Controls.Add(this.metroButton1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(752, 309);
+            this.panel1.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI Light", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(219, 90);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Welcome to GooseLua!\r\n\r\nRunning Lua {0}";
+            // 
+            // metroButton2
+            // 
+            this.metroButton2.FontWeight = MetroFramework.MetroButtonWeight.Regular;
+            this.metroButton2.Location = new System.Drawing.Point(636, 283);
+            this.metroButton2.Name = "metroButton2";
+            this.metroButton2.Size = new System.Drawing.Size(113, 23);
+            this.metroButton2.TabIndex = 2;
+            this.metroButton2.Text = "Join our Discord";
+            this.metroButton2.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.metroButton2.UseSelectable = true;
+            this.metroButton2.Click += new System.EventHandler(this.metroButton2_Click);
+            // 
+            // metroButton1
+            // 
+            this.metroButton1.FontWeight = MetroFramework.MetroButtonWeight.Regular;
+            this.metroButton1.Location = new System.Drawing.Point(3, 283);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(113, 23);
+            this.metroButton1.TabIndex = 1;
+            this.metroButton1.Text = "Visit our Website";
+            this.metroButton1.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.metroButton1.UseSelectable = true;
+            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
             // 
             // tabPage2
             // 
@@ -95,12 +147,38 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.metroPanel3);
+            this.tabPage3.Controls.Add(this.metroPanel1);
             this.tabPage3.Location = new System.Drawing.Point(4, 38);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(752, 309);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Console";
+            this.tabPage3.TabIndex = 3;
+            this.tabPage3.Text = "Lua Editor";
+            // 
+            // metroPanel1
+            // 
+            this.metroPanel1.Controls.Add(this.metroButton3);
+            this.metroPanel1.Controls.Add(this.metroTextBox2);
+            this.metroPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.metroPanel1.HorizontalScrollbarBarColor = true;
+            this.metroPanel1.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroPanel1.HorizontalScrollbarSize = 22;
+            this.metroPanel1.Location = new System.Drawing.Point(0, 0);
+            this.metroPanel1.Name = "metroPanel1";
+            this.metroPanel1.Size = new System.Drawing.Size(752, 309);
+            this.metroPanel1.TabIndex = 2;
+            this.metroPanel1.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.metroPanel1.VerticalScrollbarBarColor = true;
+            this.metroPanel1.VerticalScrollbarHighlightOnWheel = false;
+            this.metroPanel1.VerticalScrollbarSize = 31;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.metroPanel3);
+            this.tabPage4.Location = new System.Drawing.Point(4, 38);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(752, 309);
+            this.tabPage4.TabIndex = 2;
+            this.tabPage4.Text = "Console";
             // 
             // metroPanel3
             // 
@@ -109,7 +187,7 @@
             this.metroPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroPanel3.HorizontalScrollbarBarColor = true;
             this.metroPanel3.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroPanel3.HorizontalScrollbarSize = 10;
+            this.metroPanel3.HorizontalScrollbarSize = 22;
             this.metroPanel3.Location = new System.Drawing.Point(0, 0);
             this.metroPanel3.Name = "metroPanel3";
             this.metroPanel3.Size = new System.Drawing.Size(752, 309);
@@ -117,12 +195,12 @@
             this.metroPanel3.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.metroPanel3.VerticalScrollbarBarColor = true;
             this.metroPanel3.VerticalScrollbarHighlightOnWheel = false;
-            this.metroPanel3.VerticalScrollbarSize = 10;
+            this.metroPanel3.VerticalScrollbarSize = 31;
             // 
             // _console
             // 
             this.metroStyleExtender1.SetApplyMetroTheme(this._console, true);
-            this._console.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(20)))), ((int)(((byte)(20)))), ((int)(((byte)(20)))));
+            this._console.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
             this._console.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this._console.DetectUrls = false;
             this._console.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -142,6 +220,7 @@
             // 
             this.metroTextBox1.CustomButton.Image = null;
             this.metroTextBox1.CustomButton.Location = new System.Drawing.Point(730, 1);
+            this.metroTextBox1.CustomButton.Margin = new System.Windows.Forms.Padding(9, 7, 9, 7);
             this.metroTextBox1.CustomButton.Name = "";
             this.metroTextBox1.CustomButton.Size = new System.Drawing.Size(21, 21);
             this.metroTextBox1.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -195,50 +274,53 @@
             this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // metroButton1
+            // metroTextBox2
             // 
-            this.metroButton1.FontWeight = MetroFramework.MetroButtonWeight.Regular;
-            this.metroButton1.Location = new System.Drawing.Point(3, 283);
-            this.metroButton1.Name = "metroButton1";
-            this.metroButton1.Size = new System.Drawing.Size(113, 23);
-            this.metroButton1.TabIndex = 1;
-            this.metroButton1.Text = "Visit our Website";
-            this.metroButton1.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.metroButton1.UseSelectable = true;
-            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
             // 
-            // metroButton2
             // 
-            this.metroButton2.FontWeight = MetroFramework.MetroButtonWeight.Regular;
-            this.metroButton2.Location = new System.Drawing.Point(636, 283);
-            this.metroButton2.Name = "metroButton2";
-            this.metroButton2.Size = new System.Drawing.Size(113, 23);
-            this.metroButton2.TabIndex = 2;
-            this.metroButton2.Text = "Join our Discord";
-            this.metroButton2.Theme = MetroFramework.MetroThemeStyle.Dark;
-            this.metroButton2.UseSelectable = true;
-            this.metroButton2.Click += new System.EventHandler(this.metroButton2_Click);
             // 
-            // panel1
+            this.metroTextBox2.CustomButton.Image = null;
+            this.metroTextBox2.CustomButton.Location = new System.Drawing.Point(506, 1);
+            this.metroTextBox2.CustomButton.Name = "";
+            this.metroTextBox2.CustomButton.Size = new System.Drawing.Size(245, 245);
+            this.metroTextBox2.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.metroTextBox2.CustomButton.TabIndex = 1;
+            this.metroTextBox2.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroTextBox2.CustomButton.UseSelectable = true;
+            this.metroTextBox2.CustomButton.Visible = false;
+            this.metroTextBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.metroTextBox2.ForeColor = System.Drawing.Color.Red;
+            this.metroTextBox2.Lines = new string[0];
+            this.metroTextBox2.Location = new System.Drawing.Point(0, 0);
+            this.metroTextBox2.MaxLength = 32767;
+            this.metroTextBox2.Multiline = true;
+            this.metroTextBox2.Name = "metroTextBox2";
+            this.metroTextBox2.PasswordChar = '\0';
+            this.metroTextBox2.PromptText = "Lua code";
+            this.metroTextBox2.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.metroTextBox2.SelectedText = "";
+            this.metroTextBox2.SelectionLength = 0;
+            this.metroTextBox2.SelectionStart = 0;
+            this.metroTextBox2.ShortcutsEnabled = true;
+            this.metroTextBox2.Size = new System.Drawing.Size(752, 277);
+            this.metroTextBox2.TabIndex = 2;
+            this.metroTextBox2.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.metroTextBox2.UseSelectable = true;
+            this.metroTextBox2.WaterMark = "Lua code";
+            this.metroTextBox2.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.metroTextBox2.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
             // 
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.metroButton2);
-            this.panel1.Controls.Add(this.metroButton1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(752, 309);
-            this.panel1.TabIndex = 3;
+            // metroButton3
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI Light", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(219, 90);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Welcome to GooseLua!\r\n\r\nRunning Lua {0}";
+            this.metroButton3.FontWeight = MetroFramework.MetroButtonWeight.Regular;
+            this.metroButton3.Location = new System.Drawing.Point(3, 283);
+            this.metroButton3.Name = "metroButton3";
+            this.metroButton3.Size = new System.Drawing.Size(103, 23);
+            this.metroButton3.TabIndex = 3;
+            this.metroButton3.Text = "Execute Lua";
+            this.metroButton3.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.metroButton3.UseSelectable = true;
+            this.metroButton3.Click += new System.EventHandler(this.metroButton3_Click);
             // 
             // formLoader
             // 
@@ -259,12 +341,14 @@
             this.Load += new System.EventHandler(this.formLoader_Load);
             this.metroTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
-            this.metroPanel3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.metroPanel1.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.metroPanel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -275,18 +359,22 @@
         private MetroFramework.Controls.MetroTabControl metroTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage4;
         private MetroFramework.Controls.MetroPanel metroPanel3;
         private MetroFramework.Components.MetroStyleExtender metroStyleExtender1;
         private MetroFramework.Components.MetroStyleManager metroStyleManager1;
-        private System.Windows.Forms.RichTextBox _console;
         private System.Windows.Forms.ListBox modList;
-        private MetroFramework.Controls.MetroTextBox metroTextBox1;
         private MetroFramework.Controls.MetroLabel metroLabel1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         private MetroFramework.Controls.MetroButton metroButton2;
         private MetroFramework.Controls.MetroButton metroButton1;
+        private System.Windows.Forms.RichTextBox _console;
+        private MetroFramework.Controls.MetroTextBox metroTextBox1;
+        private System.Windows.Forms.TabPage tabPage3;
+        private MetroFramework.Controls.MetroPanel metroPanel1;
+        private MetroFramework.Controls.MetroTextBox metroTextBox2;
+        private MetroFramework.Controls.MetroButton metroButton3;
     }
 }
