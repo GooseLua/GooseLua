@@ -1,4 +1,4 @@
-﻿// 
+// 
 // GooseProxy.cs
 // Copyright (C) 2020 Jesús A. Álvarez
 // This file is dual-licensed under the GNU GPL 3.0 and MIT Licenses
