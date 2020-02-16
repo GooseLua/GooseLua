@@ -266,7 +266,10 @@ namespace GooseLua {
 
             KeyEnums.Load();
 
-            InjectionPoints.PreRenderEvent += updateGoose;
+
+            UserData.RegisterType<GooseProxy>();
+            UserData.RegisterType<VectorProxy>();
+            _G.LuaState.Globals["goose"] = new GooseProxy();
 
             InjectionPoints.PreTickEvent += preTick;
             InjectionPoints.PostTickEvent += postTick;
@@ -297,56 +300,6 @@ namespace GooseLua {
             }
         }
 
-        public void updateGoose(GooseEntity g, dynamic _) {
-            _G.goose = g;
-            Table goose = new Table(_G.LuaState);
-            Table position = new Table(_G.LuaState);
-            position["x"] = g.position.x;
-            position["y"] = g.position.y;
-            goose["position"] = position;
-            goose["setTarget"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                int x = arguments.Count > 0 ? arguments.AsInt(0, "Goose.setTarget") : 0;
-                int y = arguments.Count > 1 ? arguments.AsInt(1, "Goose.setTarget") : 0;
-                g.targetPos = new SamEngine.Vector2(x, y);
-                return DynValue.Nil;
-            });
-
-            goose["setPosition"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                int x = arguments.Count > 0 ? arguments.AsInt(0, "Goose.setPosition") : 0;
-                int y = arguments.Count > 1 ? arguments.AsInt(1, "Goose.setPosition") : 0;
-                g.position = new SamEngine.Vector2(x, y);
-                return DynValue.Nil;
-            });
-
-            goose["getTasks"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                Table tasks = new Table(_G.LuaState);
-                foreach (string task in API.TaskDatabase.getAllLoadedTaskIDs()) {
-                    tasks.Append(DynValue.NewString(task));
-                }
-                return DynValue.NewTable(tasks);
-            });
-
-            goose["getTask"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                return DynValue.NewString(API.TaskDatabase.getAllLoadedTaskIDs()[g.currentTask]);
-            });
-
-            goose["setTask"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                string task = arguments.AsStringUsingMeta(context, 0, "Goose.setPosition");
-                bool honk = arguments.Count > 1 ? arguments.AsUserData<bool>(1, "Goose.setTask") : true;
-                bool valid = false;
-                foreach(string tsk in API.TaskDatabase.getAllLoadedTaskIDs()) {
-                    if(tsk == task) {
-                        valid = true;
-                    }
-                }
-                if (!valid) throw new ScriptRuntimeException("Unknown task \"" + task + "\".");
-                API.Goose.setCurrentTaskByID(g, task, honk);
-                return DynValue.Nil;
-            });
-
-            _G.LuaState.Globals["goose"] = goose;
-        }
-
         public void callHooks(string hook) {
             foreach (Closure func in _G.hook.hooks[hook].Values) {
                 try {
@@ -360,30 +313,36 @@ namespace GooseLua {
         }
 
         public void preTick(GooseEntity g) {
+            _G.goose = g;
             callHooks("preTick");
         }
 
         public void postTick(GooseEntity g) {
+            _G.goose = g;
             callHooks("postTick");
         }
 
         public void preRender(GooseEntity g, Graphics e) {
+            _G.goose = g;
             e.PixelOffsetMode = PixelOffsetMode.HighSpeed;
             graphics = e;
             callHooks("preRender");
         }
 
         public void postRender(GooseEntity g, Graphics e) {
+            _G.goose = g;
             e.PixelOffsetMode = PixelOffsetMode.HighSpeed;
             graphics = e;
             callHooks("postRender");
         }
 
         public void preRig(GooseEntity g) {
+            _G.goose = g;
             callHooks("preRig");
         }
 
         public void postRig(GooseEntity g) {
+            _G.goose = g;
             callHooks("postRig");
         }
     }
