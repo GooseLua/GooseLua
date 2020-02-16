@@ -282,20 +282,6 @@ namespace GooseLua {
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
-
-            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-            timer.Tick += timerTick;
-            timer.Interval = 1;
-            timer.Enabled = true;
-        }
-
-        public void timerTick(object s, EventArgs e) {
-            if (_G.luaQueue.Count > 0) {
-                string lua = _G.luaQueue[0];
-                _G.luaQueue.RemoveAt(0);
-                _G.RunString(lua);
-                
-            }
         }
 
         public void callHooks(string hook) {
