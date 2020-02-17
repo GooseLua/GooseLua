@@ -115,6 +115,9 @@
   <ItemGroup>
     <None Include="Resources\7Ddff2D.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Licenses.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>del *.pdb &amp;&amp; del *.xml &amp;&amp; del *.config &amp;&amp; del GooseModdingAPI.dll

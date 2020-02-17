@@ -1,4 +1,3 @@
-
 local AddConsoleCommand = AddConsoleCommand
 local string = string
 local Msg = Msg

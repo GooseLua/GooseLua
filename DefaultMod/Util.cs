@@ -10,6 +10,14 @@ namespace GooseLua {
             if (num < min) num = min;
         }
 
+        public static void addCommand(formLoader form, string name) {
+            form.addCommand(name);
+        }
+
+        public static void delCommand(formLoader form, string name) {
+            form.delCommand(name);
+        }
+
         public static void MsgC(formLoader form, params dynamic[] args) {
             foreach (dynamic arg in args) {
                 if (arg is Color) {

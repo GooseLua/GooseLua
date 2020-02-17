@@ -19,6 +19,18 @@ namespace GooseLua {
             label1.Text = string.Format(label1.Text, Script.LUA_VERSION, Script.VERSION);
         }
 
+        public void addCommand(string command) {
+            metroTextBox1.AutoCompleteCustomSource.Add(command);
+        }
+
+        public void delCommand(string command) {
+            metroTextBox1.AutoCompleteCustomSource.Remove(command);
+        }
+
+        public void queue(string code, string name = null) {
+            _G.luaQueue.Enqueue(new KeyValuePair<string, string>(code, name));
+        }
+
         private void formLoader_Load(object sender, EventArgs e) {
             if (!Directory.Exists(_G.path)) Directory.CreateDirectory(_G.path);
             _G.LuaState.Globals["MsgC"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
@@ -72,7 +84,7 @@ namespace GooseLua {
                 });
             }
 
-            _G.RunString($"concommand.Add(\"clear\", function() clear_{_G.GetSessionID()}() end)");
+            queue($"concommand.Add(\"clear\", function() clear_{_G.GetSessionID()}() end)", "formLoader");
 
             string[] files = Directory.GetFiles(_G.path, "*.lua");
             foreach (string mod in files) {
@@ -81,7 +93,7 @@ namespace GooseLua {
                 modList.Items.Add(modFile.Substring(0, len - 4));
                 try {
                     string code = File.ReadAllText(mod);
-                    _G.RunString(code, modFile);
+                    queue(code, modFile);
                 } catch (ScriptRuntimeException ex) {
                     Util.MsgC(this, Color.FromArgb(255, 0, 0), string.Format("Doh! An error occured! {0}", ex.DecoratedMessage), "\r\n");
                 }
@@ -100,7 +112,7 @@ namespace GooseLua {
         }
 
         private void metroTextBox1_KeyDown(object sender, KeyEventArgs e) {
-            if(e.KeyCode == Keys.Enter) {
+            if (e.KeyCode == Keys.Enter) {
                 string safe = metroTextBox1.Text.Replace("\"", "\\\"");
                 List<string> args = new List<string>(safe.Split(' '));
                 safe = args[0];
@@ -113,8 +125,8 @@ namespace GooseLua {
                 int len = argstable.Length;
                 if (args.Count > 0) argstable = argstable.Substring(0, len - 2);
                 argstable += '}';
-                string code = "print(\"] " + safe + " " + string.Join(" ", args) + "\") concommand.Run(\"" + safe + "\", " + argstable + ")";
-                _G.RunString(code, "console");
+                string code = "print(\"] " + safe + " " + string.Join(" ", args) + "\") concommand.Run(\"" + safe + "\", " + argstable + ", \"" + string.Join(" ", args) + "\")";
+                queue(code, "console");
                 metroTextBox1.Clear();
             }
         }
@@ -157,7 +169,7 @@ namespace GooseLua {
         }
 
         private void metroButton3_Click(object sender, EventArgs e) {
-            _G.RunString(metroTextBox2.Text);
+            queue(metroTextBox2.Text, "Lua Editor");
         }
     }
 }

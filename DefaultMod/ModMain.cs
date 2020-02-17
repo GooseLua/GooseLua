@@ -42,11 +42,31 @@ namespace GooseLua {
                 try {
                     if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid _G.hook.");
                     string text = arguments.Count > 0 ? arguments.AsStringUsingMeta(context, 0, "draw.SimpleText") : "Text";
-                    string font = arguments.Count > 1 ? arguments.AsStringUsingMeta(context, 1, "draw.SimpleText") : "Courier New";
+                    string font = arguments.Count > 1 ? arguments.AsStringUsingMeta(context, 1, "draw.SimpleText") : "Segoe UI Light";
                     int x = arguments.Count > 2 ? arguments.AsInt(2, "draw.SimpleText") : 0;
                     int y = arguments.Count > 3 ? arguments.AsInt(3, "draw.SimpleText") : 0;
                     try {
                         graphics.DrawString(text, new Font(font, 12f), Brushes.White, new PointF(x, y));
+                    } catch (Exception ex) {
+                        return DynValue.NewString(ex.Message);
+                    }
+                    return DynValue.Nil;
+                } catch (ScriptRuntimeException ex) {
+                    Util.MsgC(form, Color.FromArgb(255, 0, 0), ex.Message);
+                } catch (Exception ex) {
+                    return DynValue.NewString(ex.ToString());
+                }
+                return DynValue.Nil;
+            });
+
+            draw["MeasureText"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                try {
+                    if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid _G.hook.");
+                    string text = arguments.Count > 0 ? arguments.AsStringUsingMeta(context, 0, "draw.SimpleText") : "Text";
+                    string font = arguments.Count > 1 ? arguments.AsStringUsingMeta(context, 1, "draw.SimpleText") : "Segoe UI Light";
+                    try {
+                        SizeF size = graphics.MeasureString(text, new Font(font, 12f));
+                        return DynValue.NewTable(new Table(_G.LuaState, DynValue.NewNumber(size.Width), DynValue.NewNumber(size.Height)));
                     } catch (Exception ex) {
                         return DynValue.NewString(ex.Message);
                     }
@@ -195,6 +215,8 @@ namespace GooseLua {
             _G.LuaState.Globals["Msg"] = _G.LuaState.Globals["print"];
 
             _G.LuaState.Globals["AddConsoleCommand"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                string name = arguments.AsStringUsingMeta(context, 0, "AddConsoleCommand");
+                Util.addCommand(form, name);
                 return DynValue.Nil;
             });
 
@@ -285,6 +307,18 @@ namespace GooseLua {
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
+
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Tick += luaQueue;
+            timer.Interval = 1;
+            timer.Start();
+        }
+
+        public static void luaQueue(object sender, EventArgs args) {
+            if (_G.luaQueue.Count > 0) {
+                KeyValuePair<string, string> lua = _G.luaQueue.Dequeue();
+                _G.RunString(lua.Key, lua.Value);
+            }
         }
 
         public void callHooks(string hook) {

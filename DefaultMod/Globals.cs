@@ -19,8 +19,9 @@ namespace GooseLua {
         public static GooseEntity goose;
         public static string path;
         public static Hook hook = new Hook();
-        public static List<string> luaQueue = new List<string>();
+        public static Queue<KeyValuePair<string, string>> luaQueue = new Queue<KeyValuePair<string, string>>();
         public static string ApiURL = "https://gooselua.my.to/";
+        public static List<string> commands = new List<string>();
         private static string SessionID = "";
 
         public static string GetSessionID() {
