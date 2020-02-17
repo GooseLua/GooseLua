@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace GooseLua {
     class _G {
-        public static Script LuaState = new Script(CoreModules.Preset_SoftSandbox | CoreModules.Debug | CoreModules.IO);
+        public static Script LuaState = new Script(CoreModules.Preset_SoftSandbox | CoreModules.Debug);
         public static GooseEntity goose;
         public static Graphics graphics;
         public static string path;
