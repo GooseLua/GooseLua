@@ -32,7 +32,7 @@ namespace GooseLua.Lua
             return graphics.MeasureString("A", new Font(font, 12f)).Height;
         }
 
-        public DynValue MeasureText(string text = "Text", string font = "Segoe UI Light")
+        public DynValue MeasureText(string text, string font = "Segoe UI Light")
         {
             if (graphics == default(Graphics)) throw new ScriptRuntimeException("Graphics not initialized or invalid _G.hook.");
             SizeF size = graphics.MeasureString(text, new Font(font, 12f));
