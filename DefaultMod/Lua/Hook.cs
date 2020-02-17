@@ -1,13 +1,10 @@
-﻿using GooseShared;
-using MoonSharp.Interpreter;
-using System;
+﻿using MoonSharp.Interpreter;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GooseLua.Lua {
+    [MoonSharpUserData]
     class Hook {
+        [MoonSharpHidden]
         public Dictionary<string, Dictionary<string, Closure>> hooks = new Dictionary<string, Dictionary<string, Closure>>();
         
         public void Add(string hook, string name, Closure action) {

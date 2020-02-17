@@ -82,8 +82,13 @@
     <Compile Include="Analytics.cs" />
     <Compile Include="GooseProxy.cs" />
     <Compile Include="Keys.cs" />
+    <Compile Include="Lua\Draw.cs" />
     <Compile Include="Lua\Hook.cs" />
+    <Compile Include="Lua\Input.cs" />
+    <Compile Include="Lua\Enums.cs" />
+    <Compile Include="Lua\Surface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Task.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="ModMain.cs" />

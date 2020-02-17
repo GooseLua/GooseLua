@@ -1,4 +1,4 @@
-﻿using GooseLua.Lua;
+using GooseLua.Lua;
 using GooseShared;
 using Microsoft.CSharp;
 using MoonSharp.Interpreter;
@@ -17,6 +17,7 @@ namespace GooseLua {
     class _G {
         public static Script LuaState = new Script(CoreModules.Preset_SoftSandbox | CoreModules.Debug | CoreModules.IO);
         public static GooseEntity goose;
+        public static Graphics graphics;
         public static string path;
         public static Hook hook = new Hook();
         public static Queue<KeyValuePair<string, string>> luaQueue = new Queue<KeyValuePair<string, string>>();
