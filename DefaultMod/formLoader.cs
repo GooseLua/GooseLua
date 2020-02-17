@@ -12,19 +12,13 @@ using System.Windows.Forms;
 
 namespace GooseLua {
     public partial class formLoader : MetroFramework.Forms.MetroForm {
+        AutoCompleteStringCollection commands = new AutoCompleteStringCollection();
+
         public formLoader() {
             InitializeComponent();
             Analytics.StartSession();
             Util.MsgC(this, Script.GetBanner("Goose Lua"));
             label1.Text = string.Format(label1.Text, Script.LUA_VERSION, Script.VERSION);
-        }
-
-        public void addCommand(string command) {
-            metroTextBox1.AutoCompleteCustomSource.Add(command);
-        }
-
-        public void delCommand(string command) {
-            metroTextBox1.AutoCompleteCustomSource.Remove(command);
         }
 
         public void queue(string code, string name = null) {
@@ -86,11 +80,21 @@ namespace GooseLua {
 
             queue($"concommand.Add(\"clear\", function() clear_{_G.GetSessionID()}() end)", "formLoader");
 
+            _G.LuaState.Globals["AddConsoleCommand"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                string name = arguments.AsStringUsingMeta(context, 0, "AddConsoleCommand");
+                commands.Add(name);
+                return DynValue.Nil;
+            });
+
+            commands.AddRange(new string[] {
+                "help",
+                "lua_run_cl"
+            });
+
             string[] files = Directory.GetFiles(_G.path, "*.lua");
             foreach (string mod in files) {
-                string modFile = Path.GetFileName(mod);
-                int len = modFile.Length;
-                modList.Items.Add(modFile.Substring(0, len - 4));
+                string modFile = Path.GetFileNameWithoutExtension(mod);
+                modList.Items.Add(modFile);
                 try {
                     string code = File.ReadAllText(mod);
                     queue(code, modFile);
@@ -98,8 +102,6 @@ namespace GooseLua {
                     Util.MsgC(this, Color.FromArgb(255, 0, 0), string.Format("Doh! An error occured! {0}", ex.DecoratedMessage), "\r\n");
                 }
             }
-
-            //webBrowser1.Navigate("about:" + Util.getResource("GooseLua.editor.html"));
         }
 
         private void formLoader_FormClosing(object sender, FormClosingEventArgs e) {
@@ -112,6 +114,8 @@ namespace GooseLua {
         }
 
         private void metroTextBox1_KeyDown(object sender, KeyEventArgs e) {
+            metroTextBox1.AutoCompleteCustomSource = commands;
+
             if (e.KeyCode == Keys.Enter) {
                 string safe = metroTextBox1.Text.Replace("\"", "\\\"");
                 List<string> args = new List<string>(safe.Split(' '));

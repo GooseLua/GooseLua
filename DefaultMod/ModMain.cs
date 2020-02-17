@@ -42,8 +42,6 @@ namespace GooseLua {
             _G.LuaState.Globals["Msg"] = _G.LuaState.Globals["print"];
 
             _G.LuaState.Globals["AddConsoleCommand"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                string name = arguments.AsStringUsingMeta(context, 0, "AddConsoleCommand");
-                Util.addCommand(form, name);
                 return DynValue.Nil;
             });
 
@@ -104,7 +102,6 @@ namespace GooseLua {
                 return DynValue.Nil;
             });
 
-            form = new formLoader();
             Util.include("http");
             Util.include("math");
             Util.include("string");
@@ -132,6 +129,7 @@ namespace GooseLua {
             InjectionPoints.PostUpdateRigEvent += postRig;
 
             Thread thread = new Thread(() => {
+                form = new formLoader();
                 form.ShowDialog();
             });
             thread.SetApartmentState(ApartmentState.STA);
