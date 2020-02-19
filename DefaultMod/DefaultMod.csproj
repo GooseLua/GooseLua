@@ -126,7 +126,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>del *.pdb &amp;&amp; del *.xml &amp;&amp; del *.config &amp;&amp; del GooseModdingAPI.dll
-C:\Users\carol\OneDrive\Skrivbord\goose\GooseDesktop.exe</PostBuildEvent>
+C:\Users\%25username%25\OneDrive\Skrivbord\goose\GooseDesktop.exe</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
