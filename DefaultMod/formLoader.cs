@@ -29,19 +29,28 @@ namespace GooseLua {
             if (!Directory.Exists(_G.path)) Directory.CreateDirectory(_G.path);
             _G.LuaState.Globals["MsgC"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 List<dynamic> args = new List<dynamic>();
+                Closure isColor = (Closure)context.CurrentGlobalEnv["IsColor"];
                 for (int i = 0; i < arguments.Count; i++) {
                     DynValue arg = arguments.RawGet(i, true);
                     if (arg == DynValue.Nil) continue;
-                    if (arg.Table.MetaTable["Color"] != null) {
-                        int r = (int)((Table)arg.Table.MetaTable["Color"])["r"];
-                        int g = (int)((Table)arg.Table.MetaTable["Color"])["g"];
-                        int b = (int)((Table)arg.Table.MetaTable["Color"])["b"];
-                        int a = (int)((Table)arg.Table.MetaTable["Color"])["a"];
-                        args.Add(Color.FromArgb(r, g, b, a));
+                    if (arg.Type == DataType.String)
+                    {
+                        args.Add(arg.String);
+                    } else if (isColor.Call(arg).CastToBool())
+                    {
+                        Table color = arg.Table;
+                        int r = (int)color.Get("r").Number;
+                        int g = (int)color.Get("g").Number;
+                        int b = (int)color.Get("b").Number;
+                        int a = (int)color.Get("a").Number;
+                        args.Add(Color.FromArgb(a, r, g, b));
+                    } else
+                    {
+                        throw ScriptRuntimeException.BadArgument(i, "MsgC", "expected color or string");
                     }
-                    args.Add(arg);
+                    
                 }
-                Util.MsgC(this, args);
+                Util.MsgC(this, args.ToArray());
                 return DynValue.Nil;
             });
 
