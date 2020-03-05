@@ -12,6 +12,7 @@ namespace GooseLua.Lua
         public static void Register(Script script)
         {
             RegisterEnum(typeof(Mouse), script);
+            RegisterEnum(typeof(TextAlign), script);
         }
 
         public static void RegisterEnum(Type type, Script script, string prefix = "")
@@ -36,5 +37,14 @@ namespace GooseLua.Lua
         MOUSE_WHEEL_DOWN = 113,
         MOUSE_LAST = 113,
         MOUSE_COUNT = 7
+    }
+
+    enum TextAlign
+    {
+        TEXT_ALIGN_LEFT = 0,
+        TEXT_ALIGN_CENTER = 1,
+        TEXT_ALIGN_RIGHT = 2,
+        TEXT_ALIGN_TOP = 3,
+        TEXT_ALIGN_BOTTOM = 4
     }
 }

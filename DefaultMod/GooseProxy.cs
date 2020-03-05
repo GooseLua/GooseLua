@@ -1,5 +1,7 @@
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using GooseLua.Lua;
 using GooseShared;
 using MoonSharp.Interpreter;
 using SamEngine;
@@ -9,7 +11,9 @@ namespace GooseLua
     class GooseProxy
     {
         private readonly Script script;
-        private GooseEntity goose => _G.goose;
+        [MoonSharpHidden]
+        public GooseEntity goose => _G.goose;
+        public DynValue renderData { get; private set; }
 
         [MoonSharpHidden]
         public GooseProxy(Script script)
@@ -17,6 +21,7 @@ namespace GooseLua
             this.script = script;
             script.Globals["Speed"] = UserData.CreateStatic<GooseEntity.SpeedTiers>();
             script.Globals["ScreenDirection"] = UserData.CreateStatic<ScreenDirection>();
+            this.renderData = DynValue.FromObject(script, new RenderDataProxy(script, this));
         }
 
         [MoonSharpHidden]
@@ -26,6 +31,7 @@ namespace GooseLua
             UserData.RegisterType<VectorProxy>();
             UserData.RegisterType<RigProxy>();
             UserData.RegisterType<ProceduralFeetsProxy>();
+            UserData.RegisterType<RenderDataProxy>();
             UserData.RegisterType<ScreenDirection>();
             UserData.RegisterType<GooseEntity.SpeedTiers>();
         }
@@ -421,5 +427,89 @@ namespace GooseLua
 
         public const float wantStepAtDistance = ProceduralFeets.wantStepAtDistance;
         public const float overshootFraction = ProceduralFeets.overshootFraction;
+    }
+
+    class RenderDataProxy {
+        private Script script;
+        private GooseProxy gooseProxy;
+        private GooseRenderData renderData { get => gooseProxy.goose.renderData; }
+        private Color shadowColor;
+        private Closure isColor = null;
+
+        [MoonSharpHidden]
+        public RenderDataProxy(Script script, GooseProxy gooseProxy) {
+            this.script = script;
+            this.gooseProxy = gooseProxy;
+        }
+
+        public Table GooseWhite {
+            get => Surface.GetColorTable(script, renderData.brushGooseWhite.Color);
+            set => renderData.brushGooseWhite = new SolidBrush(Surface.GetColor(value, Color.White));
+        }
+
+        public Table GooseOrange {
+            get => Surface.GetColorTable(script, renderData.brushGooseOrange.Color);
+            set => renderData.brushGooseWhite = new SolidBrush(Surface.GetColor(value, Color.Orange));
+        }
+
+        public Table GooseOutline {
+            get => Surface.GetColorTable(script, renderData.brushGooseOutline.Color);
+            set => renderData.brushGooseWhite = new SolidBrush(Surface.GetColor(value, Color.LightGray));
+        }
+
+        public Table GooseShadow {
+            get => Surface.GetColorTable(script, GetAPixel(renderData.shadowBitmap));
+            set => SetShadowColor(value);
+        }
+
+        public bool GooseShadowFill {
+            get => IsFullyOpaque(renderData.shadowBitmap);
+            set => SetShadowColor(null, value);
+        }
+
+        private bool IsFullyOpaque(Bitmap bitmap) {
+            for(int x = 0; x < bitmap.Width; x++) {
+                for(int y = 0; y < bitmap.Height; y++) {
+                    if (bitmap.GetPixel(x, y).A < 255) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private Color GetAPixel(Bitmap bitmap) {
+            for (int x = 0; x < bitmap.Width; x++) {
+                for (int y = 0; y < bitmap.Height; y++) {
+                    var pixel = bitmap.GetPixel(x, y);
+                    if (pixel.A > 0) {
+                        return pixel;
+                    }
+                }
+            }
+            return Color.Transparent;
+        }
+
+        public void SetShadowColor(Table value, bool fill = false) {
+            if (isColor == null) {
+                isColor = (Closure)script.Globals["IsColor"];
+            }
+
+            if (value != null && isColor.Call(value).CastToBool()) {
+                shadowColor = Surface.GetColor(value, Color.DarkGray);
+            }
+
+            if (fill) {
+                renderData.shadowBitmap = new Bitmap(1, 1);
+                renderData.shadowBitmap.SetPixel(0, 0, shadowColor);
+            } else {
+                renderData.shadowBitmap = new Bitmap(2, 2);
+                renderData.shadowBitmap.SetPixel(0, 0, Color.Transparent);
+                renderData.shadowBitmap.SetPixel(1, 1, Color.Transparent);
+                renderData.shadowBitmap.SetPixel(1, 0, Color.Transparent);
+                renderData.shadowBitmap.SetPixel(0, 1, shadowColor);
+            }
+            renderData.shadowBrush = new TextureBrush(renderData.shadowBitmap);
+        }
     }
 }

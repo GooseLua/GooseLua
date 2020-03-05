@@ -16,13 +16,6 @@ namespace GooseLua {
         void IMod.Init() {
             _G.path = Path.GetFullPath(Path.Combine(API.Helper.getModDirectory(this), "..", "..", "Lua Mods"));
 
-            _G.hook.hooks["preRig"] = new Dictionary<string, Closure>();
-            _G.hook.hooks["postRig"] = new Dictionary<string, Closure>();
-            _G.hook.hooks["preTick"] = new Dictionary<string, Closure>();
-            _G.hook.hooks["postTick"] = new Dictionary<string, Closure>();
-            _G.hook.hooks["preRender"] = new Dictionary<string, Closure>();
-            _G.hook.hooks["postRender"] = new Dictionary<string, Closure>();
-
             _G.LuaState.Globals["ScrW"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 return DynValue.NewNumber(Screen.PrimaryScreen.Bounds.Width);
             });
@@ -34,9 +27,11 @@ namespace GooseLua {
             UserData.RegisterAssembly();
             Lua.Enums.Register(_G.LuaState);
 
-            _G.LuaState.Globals["draw"] = new Lua.Draw(_G.LuaState);
-            _G.LuaState.Globals["surface"] = new Lua.Surface(_G.LuaState);
+            Lua.Surface surface = new Lua.Surface(_G.LuaState);
+            _G.LuaState.Globals["draw"] = new Lua.Draw(_G.LuaState, surface);
+            _G.LuaState.Globals["surface"] = surface;
             _G.LuaState.Globals["hook"] = _G.hook;
+            _G.hook.form = form;
             _G.LuaState.Globals["input"] = new Lua.Input(_G.LuaState);
             _G.LuaState.Globals["Msg"] = _G.LuaState.Globals["print"];
 
@@ -117,6 +112,9 @@ namespace GooseLua {
             _G.LuaState.Globals["GetModDirectory"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 return DynValue.NewString(_G.path);
             });
+            _G.LuaState.Globals["CurTime"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
+                return DynValue.NewNumber(SamEngine.Time.time);
+            });
 
             _G.LuaState.Globals["RegisterTask"] = CallbackFunction.FromMethodInfo(_G.LuaState, typeof(Task).GetMethod("Register"));
 
@@ -147,50 +145,38 @@ namespace GooseLua {
             }
         }
 
-        public void callHooks(string hook) {
-            foreach (Closure func in _G.hook.hooks[hook].Values) {
-                try {
-                    func.Call();
-                } catch(InterpreterException ex) {
-                    Util.MsgC(form, Color.FromArgb(255, 0, 0), string.Format("[ERROR] {0}: {1}\r\n{2}", ex.Source, ex.DecoratedMessage, ex.StackTrace), "\r\n");
-                } catch(Exception ex) {
-                    MessageBox.Show(ex.ToString(), ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
         public void preTick(GooseEntity g) {
             _G.goose = g;
-            callHooks("preTick");
+            _G.hook.CallHooks("preTick");
         }
 
         public void postTick(GooseEntity g) {
             _G.goose = g;
-            callHooks("postTick");
+            _G.hook.CallHooks("postTick");
         }
 
         public void preRender(GooseEntity g, Graphics e) {
             _G.goose = g;
             _G.graphics = e;
             e.PixelOffsetMode = PixelOffsetMode.HighSpeed;
-            callHooks("preRender");
+            _G.hook.CallHooks("preRender");
         }
 
         public void postRender(GooseEntity g, Graphics e) {
             _G.goose = g;
             _G.graphics = e;
             e.PixelOffsetMode = PixelOffsetMode.HighSpeed;
-            callHooks("postRender");
+            _G.hook.CallHooks("postRender");
         }
 
         public void preRig(GooseEntity g) {
             _G.goose = g;
-            callHooks("preRig");
+            _G.hook.CallHooks("preRig");
         }
 
         public void postRig(GooseEntity g) {
             _G.goose = g;
-            callHooks("postRig");
+            _G.hook.CallHooks("postRig");
         }
     }
 }
