@@ -34,6 +34,7 @@ namespace GooseLua {
             _G.hook.form = form;
             _G.LuaState.Globals["input"] = new Lua.Input(_G.LuaState);
             _G.LuaState.Globals["Msg"] = _G.LuaState.Globals["print"];
+            _G.LuaState.Globals["config"] = new Lua.Config(Path.Combine(_G.path, "config.ini"));
 
             _G.LuaState.Globals["AddConsoleCommand"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
                 return DynValue.Nil;
