@@ -7,7 +7,6 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace GooseLua {
@@ -22,7 +21,9 @@ namespace GooseLua {
         }
 
         public void queue(string code, string name = null) {
-            _G.luaQueue.Enqueue(new KeyValuePair<string, string>(code, name));
+            _G.mainQueue.Enqueue(delegate {
+                _G.RunString(code, name);
+            });
         }
 
         private void formLoader_Load(object sender, EventArgs e) {

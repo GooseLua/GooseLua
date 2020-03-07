@@ -1,11 +1,9 @@
 using GooseShared;
 using MoonSharp.Interpreter;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -68,33 +66,10 @@ namespace GooseLua {
             });
 
             _G.LuaState.Globals["HTTP"] = new CallbackFunction((ScriptExecutionContext context, CallbackArguments arguments) => {
-                Table args = arguments[0].Table;
-                if (args["url"] == null || args["method"] == null) throw new ScriptRuntimeException("Invalid request table.");
-
-                Action _ = async() => {
-                    string result = "";
-
-                    if ((string)args["method"] == "POST") {
-                        using (WebClient wc = new WebClient()) {
-                            wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                            result = await wc.DownloadStringTaskAsync($"{_G.ApiURL}analytics");
-                        }
-                    } else if ((string)args["method"] == "GET") {
-                        using (WebClient wc = new WebClient()) {
-                            result = await wc.DownloadStringTaskAsync((string) args["url"]);
-                        }
-                    } else {
-                        throw new ScriptRuntimeException($"Unsupported HTTP protocol \"{args["method"]}\".");
-                    }
-
-                    if(result.Trim() != "") {
-                        ((Closure)args["success"]).Call(result);
-                    }
-                };
-
-                _();
-
-                return DynValue.Nil;
+                if (arguments.Count == 1 && arguments[0].Type == DataType.Table) {
+                    return DynValue.NewBoolean(Lua.Http.Request(arguments[0].Table));
+                }
+                return DynValue.False;
             });
 
             Util.include("http");
@@ -134,16 +109,19 @@ namespace GooseLua {
             thread.Start();
 
             System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-            timer.Tick += luaQueue;
+            timer.Tick += delegate {
+                while (_G.mainQueue.Count > 0) {
+                    try {
+                        _G.mainQueue.Dequeue().Invoke();
+                    } catch (InterpreterException ex) {
+                        Util.MsgC(form, Color.FromArgb(255, 0, 0), string.Format("[ERROR] {0}: {1}\r\n{2}", ex.Source, ex.DecoratedMessage, ex.StackTrace), "\r\n");
+                    } catch (Exception ex) {
+                        MessageBox.Show(ex.ToString(), ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            };
             timer.Interval = 1;
             timer.Start();
-        }
-
-        public static void luaQueue(object sender, EventArgs args) {
-            if (_G.luaQueue.Count > 0) {
-                KeyValuePair<string, string> lua = _G.luaQueue.Dequeue();
-                _G.RunString(lua.Key, lua.Value);
-            }
         }
 
         public void preTick(GooseEntity g) {
