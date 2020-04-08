@@ -1,4 +1,4 @@
-![Banner](https://whitenamehate.group/8d1cF2d.png)
+
 Simple Lua Modloader for Desktop Goose inspired by Quack.
 
 Has most of Garry's Mods lua functions (hook, surface, bit, etc...)
